@@ -38,6 +38,7 @@ public class Controller {
         this.tokens = tokens;
     }
 
+
     /**
      * Register method it's used to register a new user into the application.
      *
@@ -48,6 +49,7 @@ public class Controller {
 
     public void register(String name, String username, String password) {
         User user = new User(name, username, password);
+        System.out.println();
         users.insert(user);
     }
 
