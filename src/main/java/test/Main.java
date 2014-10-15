@@ -26,6 +26,7 @@ public class Main {
         Controller controller = injector.getInstance(Controller.class);
         //controller.register("Folea", "Folea", "1234");
         System.out.println(controller.login("Folea", "1234"));
+        System.out.println("User it's logged");
         //controller.createPost("FOLEA FOLEA FOLEA");
         //controller.commentPost("commentssssda", 2);
         //controller.likePublication(2);

@@ -25,6 +25,9 @@
         <module name="facebook" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="facebook" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 
