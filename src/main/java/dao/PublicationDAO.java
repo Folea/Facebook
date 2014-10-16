@@ -1,7 +1,5 @@
 package dao;
 
-import model.Comment;
-import model.Post;
 import model.Publication;
 import model.User;
 

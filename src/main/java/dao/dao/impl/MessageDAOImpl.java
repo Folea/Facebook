@@ -27,6 +27,7 @@ public class MessageDAOImpl implements MessageDAO {
 
     /**
      * Insert method it's used to persist a message into the database.
+     *
      * @param message The message to persist
      */
 
@@ -38,6 +39,7 @@ public class MessageDAOImpl implements MessageDAO {
 
     /**
      * GetRecvMessage method it's used to get the messages received by an user.
+     *
      * @param user The user for which to get the messages.
      * @return List of messages.
      */

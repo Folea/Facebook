@@ -6,7 +6,11 @@
 
     <groupId>facebook</groupId>
     <artifactId>facebook</artifactId>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
+    <name>Facebook</name>
+    <url>http://maven.apache.org</url>
+
 
     <dependencies>
         <dependency>
@@ -14,7 +18,6 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.33</version>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
@@ -40,11 +43,23 @@
             <artifactId>easymock</artifactId>
             <version>3.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
-
     <build>
+        <finalName>facebook</finalName>
+
         <plugins>
-            <plugin>
+           <!--<plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.4.1</version>
                 <configuration>
@@ -61,7 +76,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -73,5 +88,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

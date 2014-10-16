@@ -14,9 +14,9 @@ public class User {
     @GeneratedValue
     private int id;
     @Basic
-    @Column(unique = true)
     private String name;
     @Basic
+    @Column(unique = true)
     private String username;
     @Basic
     private String password;

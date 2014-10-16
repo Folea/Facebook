@@ -5,12 +5,10 @@ import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import dao.UserDAO;
 import model.User;
+import my_exceptions.UserNotExistsExcepiton;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 @Singleton
 public class UserDAOImpl implements UserDAO {
@@ -27,11 +25,12 @@ public class UserDAOImpl implements UserDAO {
     @Transactional
     public void insert(User user) {
         em.persist(user);
+
     }
 
     @Override
     @Transactional
-    public User getUserByUsername(String name) {
+    public User getUserByUsername(String name) throws UserNotExistsExcepiton {
         User user = null;
         try {
             TypedQuery<User> q = em.createNamedQuery("User.getUserByUsername", User.class);
@@ -39,6 +38,7 @@ public class UserDAOImpl implements UserDAO {
             user = q.getSingleResult();
         } catch (NoResultException ex) {
             logger.info("No result for username " + name);
+            throw new UserNotExistsExcepiton();
         }
         return user;
     }

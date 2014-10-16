@@ -28,6 +28,7 @@ public class PublicationDAOImpl implements PublicationDAO {
 
     /**
      * Insert method it's used to persist a publication into the database.
+     *
      * @param publication The publication to persist.
      */
 
@@ -39,6 +40,7 @@ public class PublicationDAOImpl implements PublicationDAO {
 
     /**
      * GetPublicationById it's used to get a publication with the indicate id.
+     *
      * @param id The id of the publication.
      * @return Publication
      */
@@ -53,6 +55,7 @@ public class PublicationDAOImpl implements PublicationDAO {
 
     /**
      * GetPostByUser it's used to get all the post posted by an user.
+     *
      * @param user The user for which get the posts.
      * @return List of Posts
      */
@@ -67,6 +70,7 @@ public class PublicationDAOImpl implements PublicationDAO {
 
     /**
      * GetCommentByPost it's used to get a comment from a post.
+     *
      * @param publication
      * @return
      */

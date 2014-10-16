@@ -1,9 +1,14 @@
 package controller;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 import dao.*;
+import my_exceptions.UserExistsException;
 import model.*;
+import my_exceptions.UserNotExistsExcepiton;
+import my_exceptions.WrongPasswordException;
 
+import javax.persistence.RollbackException;
 import java.util.List;
 
 /**
@@ -39,35 +44,33 @@ public class Controller {
     }
 
 
-    /**
-     * Register method it's used to register a new user into the application.
-     *
-     * @param name     The name of the new user.
-     * @param username The username of the new user.
-     * @param password The password of the new user.
-     */
 
-    public void register(String name, String username, String password) {
-        User user = new User(name, username, password);
-        System.out.println();
-        users.insert(user);
+    public void register(String json) throws UserExistsException {
+        Gson gson = new Gson();
+        User user = gson.fromJson(json, User.class);
+
+        try{
+            users.insert(user);
+        } catch (RollbackException ex) {
+            throw new UserExistsException();
+        }
+
     }
 
     /**
      * Login method it's used to login into the application. If the user exists create a token and assigns it to the user.
      *
-     * @param username The user of the logging user.
-     * @param password The password of the logging user.
      * @return Returns true if the user exists and the password match, otherwise returns false.
      */
 
-    public boolean login(String username, String password) {
-        User user = null;
-        user = users.getUserByUsername(username);
+    public boolean login(String json) throws UserNotExistsExcepiton, WrongPasswordException {
+        User user;
+        Gson gson = new Gson();
+        user = users.getUserByUsername(gson.fromJson(json, User.class).getUsername());
         if (user == null) {
             return false;
-        } else if (user.getPassword().compareTo(password) != 0) {
-            return false;
+        } else if (user.getPassword().compareTo(gson.fromJson(json, User.class).getPassword()) != 0) {
+            throw new WrongPasswordException();
         } else {
             Token token = new Token(user);
             tokens.insert(token);
@@ -83,7 +86,7 @@ public class Controller {
      * @param content The content of the message.
      */
 
-    public void sendMessage(String toUser, String content) {
+    public void sendMessage(String toUser, String content) throws UserNotExistsExcepiton {
         User user = users.getUserByUsername(toUser);
         Message message = new Message(content, connectedUser.getUser(), user);
         messages.insert(message);
@@ -122,8 +125,9 @@ public class Controller {
 
     /**
      * CommentPost method it's used to comment a post.
+     *
      * @param content The comment of the post.
-     * @param id The id of the post to be commented.
+     * @param id      The id of the post to be commented.
      */
 
     public void commentPost(String content, int id) {
@@ -133,6 +137,7 @@ public class Controller {
 
     /**
      * GetComments method it's used to get the comments for a publication.
+     *
      * @param publication The publication for which to get the comments.
      * @return List of comments.
      */
@@ -143,6 +148,7 @@ public class Controller {
 
     /**
      * LikePublication method it's used to like a publication.
+     *
      * @param id Id of the publication to like.
      */
 

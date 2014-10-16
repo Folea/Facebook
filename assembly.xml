@@ -1,7 +1,7 @@
 <assembly>
     <id>bin</id>
     <formats>
-        <format>jar</format>
+        <format>war</format>
     </formats>
     <dependencySets>
         <dependencySet>

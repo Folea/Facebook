@@ -27,6 +27,7 @@ public class LikesDAOImpl implements LikesDAO {
 
     /**
      * Insert method it's used to persist a like.
+     *
      * @param like The like to persist.
      */
 
@@ -39,6 +40,7 @@ public class LikesDAOImpl implements LikesDAO {
     /**
      * GetLikesForPublication method it's used to get the likes for a publication(comment or post). It get the likes
      * by the publication id.
+     *
      * @param publication The publication for which get the likes;
      * @return List of likes.
      */
