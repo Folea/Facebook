@@ -23,4 +23,5 @@ public class Main {
         System.out.println(controller.getPosts(651).size());
     }
 
+
 }
