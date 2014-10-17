@@ -5,9 +5,7 @@ import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import dao.TokenDAO;
 import model.Token;
-import model.User;
 import my_exceptions.TokenNotExistsException;
-import my_exceptions.UserNotExistsExcepiton;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;

@@ -4,8 +4,9 @@
     <data-source source="LOCAL" name="facebook" uuid="43d6451f-de1a-4f16-9e4a-f8ace76d69e1">
       <driver-ref>mysql</driver-ref>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/test</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/facebook</jdbc-url>
       <user-name>root</user-name>
+      <user-password>df9bdf98df99df9e</user-password>
       <libraries>
         <library>
           <url>file://$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.33/mysql-connector-java-5.1.33.jar</url>

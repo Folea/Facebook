@@ -5,9 +5,10 @@ package my_exceptions;
  */
 public class WrongPasswordException extends Exception {
 
-    public WrongPasswordException(){}
+    public WrongPasswordException() {
+    }
 
-    public WrongPasswordException(Exception ex){
+    public WrongPasswordException(Exception ex) {
         super(ex);
     }
 }

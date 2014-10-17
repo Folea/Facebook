@@ -1,9 +1,12 @@
 package web_service;
 
+import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
+import dto.PostOutputDTO;
+import dto.PublicationDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
 import model.Post;
@@ -12,47 +15,51 @@ import my_exceptions.TokenNotExistsException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.LinkedList;
 import java.util.List;
 
-@Path("/posts")
+@Path("/publication")
 public class PostService {
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getPosts(@QueryParam("token") int token){
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getPosts(@QueryParam("token") int token) {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
+        Gson gson = new Gson();
         try {
             List<Publication> listPosts = controller.getPosts(token);
-            String posts = "";
+            List<PostOutputDTO> listPostsDTO = new LinkedList<PostOutputDTO>();
             for (Publication p : listPosts) {
-                posts += p.getId() + ". \n" + "Posted by: " + ((Post)p).getFromUser().getUsername() + "\n"
-                        + p.getContent() + "\n" + controller.getLikesForPublciation(p).size() + " Likes \n Comments:";
+                PostOutputDTO postOutputDTO = new PostOutputDTO(((Post) p).getFromUser().getUsername(), p.getContent(),
+                        controller.getLikesForPublciation(p).size());
                 List<Publication> comments = controller.getComments(p);
-                for(Publication c : comments){
-                    posts += "\t " + c.getId() + ". \n" + "\tContent: " + c.getContent() + "\n\t"
-                            + controller.getLikesForPublciation(c).size() + " Likes \n" ;
+                for (Publication c : comments) {
+                    PublicationDTO publicationDTO = new PublicationDTO(c.getContent(), controller.getLikesForPublciation(c).size());
+                    postOutputDTO.addComment(publicationDTO);
                 }
+                listPostsDTO.add(postOutputDTO);
             }
-            return posts;
-        } catch (TokenNotExistsException ex){
-            return "Token is incorrect " + token;
+            return gson.toJson(listPostsDTO, List.class);
+        } catch (TokenNotExistsException ex) {
+            return gson.toJson("Token is incorrect " + token);
         }
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String createPost(String json){
+    @Produces(MediaType.APPLICATION_JSON)
+    public String createPost(String json) {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
-        try{
+        Gson gson = new Gson();
+        try {
             controller.createPost(json);
-            return "Post has been created successful";
-        } catch (TokenNotExistsException ex){
-            return "The user is not connected";
+            return gson.toJson("Post has been created successful");
+        } catch (TokenNotExistsException ex) {
+            return gson.toJson("The user is not connected");
         }
 
     }

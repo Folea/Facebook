@@ -8,7 +8,9 @@ import model.User;
 import my_exceptions.UserNotExistsExcepiton;
 import org.apache.log4j.Logger;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 @Singleton
 public class UserDAOImpl implements UserDAO {

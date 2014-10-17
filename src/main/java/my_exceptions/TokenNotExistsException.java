@@ -1,7 +1,5 @@
 package my_exceptions;
 
-import javax.persistence.NoResultException;
-
 /**
  * Created by cristian.folea on 16.10.2014.
  */

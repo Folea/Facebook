@@ -1,9 +1,11 @@
 package web_service;
 
+import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
+import dto.MessageDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
 import model.Message;
@@ -12,43 +14,47 @@ import my_exceptions.UserNotExistsExcepiton;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.LinkedList;
 import java.util.List;
 
 @Path("/message")
 public class MessageService {
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getAllMessages(@QueryParam("token") int token){
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getAllMessages(@QueryParam("token") int token) {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
+        Gson gson = new Gson();
         try {
             List<Message> listMessages = controller.getMessages(token);
-            String messages = "";
+            List<MessageDTO> listMessagesDTO = new LinkedList<MessageDTO>();
             for (Message m : listMessages) {
-                messages += m.getId() + ". \n" + "From: " + m.getFromUser() + "\n" + "Content: " + m.getContent() + "\n";
+                MessageDTO msg = new MessageDTO(m.getToUser().getUsername(), controller.getUserByToken(token).getUsername(), m.getContent());
+                listMessagesDTO.add(msg);
             }
-            return messages;
-        } catch (TokenNotExistsException ex){
-            return "Token is incorrect " + token;
+            return gson.toJson(listMessagesDTO, List.class);
+        } catch (TokenNotExistsException ex) {
+            return gson.toJson("Token is incorrect " + token);
         }
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String sendMessage(String json){
+    @Produces(MediaType.APPLICATION_JSON)
+    public String sendMessage(String json) {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
-        try{
+        Gson gson = new Gson();
+        try {
             controller.sendMessage(json);
-            return "Message send";
+            return gson.toJson("Message send");
         } catch (UserNotExistsExcepiton ex) {
-            return "The user doesn't exist";
-        } catch (TokenNotExistsException ex){
-            return "Must be logged";
+            return gson.toJson("The user doesn't exist");
+        } catch (TokenNotExistsException ex) {
+            return gson.toJson("Must be logged");
         }
     }
 

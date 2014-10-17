@@ -6,9 +6,9 @@ import dao.*;
 import dto.MessageDTO;
 import dto.PublicationDTO;
 import dto.UserDTO;
+import model.*;
 import my_exceptions.TokenNotExistsException;
 import my_exceptions.UserExistsException;
-import model.*;
 import my_exceptions.UserNotExistsExcepiton;
 import my_exceptions.WrongPasswordException;
 
@@ -47,13 +47,15 @@ public class Controller {
         this.tokens = tokens;
     }
 
-
+    public User getUserByToken(int token) throws TokenNotExistsException {
+        return tokens.getTokenById(token).getUser();
+    }
 
     public void register(String json) throws UserExistsException {
         Gson gson = new Gson();
         User user = gson.fromJson(json, User.class);
 
-        try{
+        try {
             users.insert(user);
         } catch (RollbackException ex) {
             throw new UserExistsException(ex);
@@ -84,8 +86,8 @@ public class Controller {
 
     public void sendMessage(String json) throws UserNotExistsExcepiton, TokenNotExistsException {
         Gson gson = new Gson();
-        Message message =  new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(connectedUser).getUser(),
-                users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername()) );
+        Message message = new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(connectedUser).getUser(),
+                users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername()));
         messages.insert(message);
     }
 

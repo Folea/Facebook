@@ -1,6 +1,8 @@
 package model;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 @DiscriminatorValue(value = "POST")
