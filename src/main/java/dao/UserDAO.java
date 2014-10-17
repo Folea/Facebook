@@ -1,14 +1,14 @@
 package dao;
 
 import model.User;
-import my_exceptions.UserNotExistsExcepiton;
+import my_exceptions.UserNotExistsException;
 
 public interface UserDAO {
 
     public void insert(User user) /*throws UserExistsException*/;
 
-    public User getUserByUsername(String name) throws UserNotExistsExcepiton;
+    public User getUserByUsername(String name) throws UserNotExistsException;
 
-    public User getUserById(int id) throws UserNotExistsExcepiton;
+    public User getUserById(int id) throws UserNotExistsException;
 
 }

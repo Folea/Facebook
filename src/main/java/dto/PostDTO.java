@@ -3,20 +3,17 @@ package dto;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by cristian.folea on 17.10.2014.
- */
-public class PostOutputDTO {
+public class PostDTO {
 
     private String fromUser;
     private String content;
     private List<PublicationDTO> comments;
     private int likes;
 
-    public PostOutputDTO() {
+    public PostDTO() {
     }
 
-    public PostOutputDTO(String fromUser, String content, int likes) {
+    public PostDTO(String fromUser, String content, int likes) {
         this.fromUser = fromUser;
         this.content = content;
         this.likes = likes;

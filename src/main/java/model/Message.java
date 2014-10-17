@@ -29,20 +29,8 @@ public class Message {
         return content;
     }
 
-    public User getFromUser() {
-        return fromUser;
-    }
-
     public User getToUser() {
         return toUser;
-    }
-
-    public void setToUser(User user) {
-        this.toUser = toUser;
-    }
-
-    public void setFromUsers(User user) {
-        this.toUser = toUser;
     }
 
     public int getId() {

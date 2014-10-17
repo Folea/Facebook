@@ -5,7 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
-import dto.PostOutputDTO;
+import dto.PostDTO;
 import dto.PublicationDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
@@ -30,13 +30,13 @@ public class PostService {
         Gson gson = new Gson();
         try {
             List<Publication> listPosts = controller.getPosts(token);
-            List<PostOutputDTO> listPostsDTO = new LinkedList<PostOutputDTO>();
+            List<PostDTO> listPostsDTO = new LinkedList<>();
             for (Publication p : listPosts) {
-                PostOutputDTO postOutputDTO = new PostOutputDTO(((Post) p).getFromUser().getUsername(), p.getContent(),
-                        controller.getLikesForPublciation(p).size());
+                PostDTO postOutputDTO = new PostDTO(((Post) p).getFromUser().getUsername(), p.getContent(),
+                        controller.getLikesForPublication(p).size());
                 List<Publication> comments = controller.getComments(p);
                 for (Publication c : comments) {
-                    PublicationDTO publicationDTO = new PublicationDTO(c.getContent(), controller.getLikesForPublciation(c).size());
+                    PublicationDTO publicationDTO = new PublicationDTO(c.getContent(), controller.getLikesForPublication(c).size());
                     postOutputDTO.addComment(publicationDTO);
                 }
                 listPostsDTO.add(postOutputDTO);

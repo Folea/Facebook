@@ -10,7 +10,7 @@ import injector.MyInitializer;
 import injector.MyInjector;
 import model.Message;
 import my_exceptions.TokenNotExistsException;
-import my_exceptions.UserNotExistsExcepiton;
+import my_exceptions.UserNotExistsException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -29,7 +29,7 @@ public class MessageService {
         Gson gson = new Gson();
         try {
             List<Message> listMessages = controller.getMessages(token);
-            List<MessageDTO> listMessagesDTO = new LinkedList<MessageDTO>();
+            List<MessageDTO> listMessagesDTO = new LinkedList<>();
             for (Message m : listMessages) {
                 MessageDTO msg = new MessageDTO(m.getToUser().getUsername(), controller.getUserByToken(token).getUsername(), m.getContent());
                 listMessagesDTO.add(msg);
@@ -51,7 +51,7 @@ public class MessageService {
         try {
             controller.sendMessage(json);
             return gson.toJson("Message send");
-        } catch (UserNotExistsExcepiton ex) {
+        } catch (UserNotExistsException ex) {
             return gson.toJson("The user doesn't exist");
         } catch (TokenNotExistsException ex) {
             return gson.toJson("Must be logged");

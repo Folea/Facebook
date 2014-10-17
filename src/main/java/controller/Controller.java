@@ -66,7 +66,7 @@ public class Controller {
      * @return Returns true if the user exists and the password match, otherwise returns false.
      */
 
-    public boolean login(String json) throws UserNotExistsExcepiton, WrongPasswordException {
+    public boolean login(String json) throws UserNotExistsException, WrongPasswordException {
         User user;
         Gson gson = new Gson();
         user = users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername());
@@ -81,7 +81,7 @@ public class Controller {
         }
     }
 
-    public void sendMessage(String json) throws UserNotExistsExcepiton, TokenNotExistsException {
+    public void sendMessage(String json) throws UserNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
         Message message = new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(connectedUser).getUser(),
                 users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername()));
@@ -140,7 +140,7 @@ public class Controller {
         likes.insert(like);
     }
 
-    public List<Likes> getLikesForPublciation(Publication publication) {
+    public List<Likes> getLikesForPublication(Publication publication) {
         return likes.getLikesForPublication(publication);
     }
 

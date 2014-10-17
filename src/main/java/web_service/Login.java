@@ -7,7 +7,7 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
 import injector.MyInitializer;
 import injector.MyInjector;
-import my_exceptions.UserNotExistsExcepiton;
+import my_exceptions.UserNotExistsException;
 import my_exceptions.WrongPasswordException;
 
 import javax.ws.rs.Consumes;
@@ -30,7 +30,7 @@ public class Login {
         try {
             controller.login(json);
             return gson.toJson("User logged successful");
-        } catch (UserNotExistsExcepiton ex) {
+        } catch (UserNotExistsException ex) {
             return gson.toJson("The user doesn't exist");
         } catch (WrongPasswordException ex) {
             return gson.toJson("The password is wrong");
