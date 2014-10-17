@@ -38,14 +38,14 @@ public class UserDAOImpl implements UserDAO {
             user = q.getSingleResult();
         } catch (NoResultException ex) {
             logger.info("No result for username " + name);
-            throw new UserNotExistsExcepiton();
+            throw new UserNotExistsExcepiton(ex);
         }
         return user;
     }
 
     @Override
     @Transactional
-    public User getUserById(int id) {
+    public User getUserById(int id) throws UserNotExistsExcepiton {
         User user = null;
         try {
             TypedQuery<User> q = em.createNamedQuery("User.getUserById", User.class);
@@ -53,6 +53,7 @@ public class UserDAOImpl implements UserDAO {
             user = q.getSingleResult();
         } catch (NoResultException ex) {
             System.out.println("No result for id " + id);
+            throw new UserNotExistsExcepiton(ex);
         }
         return user;
     }

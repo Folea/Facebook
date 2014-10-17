@@ -9,6 +9,6 @@ public interface UserDAO {
 
     public User getUserByUsername(String name) throws UserNotExistsExcepiton;
 
-    public User getUserById(int id);
+    public User getUserById(int id) throws UserNotExistsExcepiton;
 
 }

@@ -29,7 +29,7 @@ public class Message {
         return content;
     }
 
-    public User getFrUser() {
+    public User getFromUser() {
         return fromUser;
     }
 
@@ -37,4 +37,15 @@ public class Message {
         return toUser;
     }
 
+    public void setToUser(User user) {
+        this.toUser = toUser;
+    }
+
+    public void setFromUsers(User user) {
+        this.toUser = toUser;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

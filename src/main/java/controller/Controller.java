@@ -3,6 +3,10 @@ package controller;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import dao.*;
+import dto.MessageDTO;
+import dto.PublicationDTO;
+import dto.UserDTO;
+import my_exceptions.TokenNotExistsException;
 import my_exceptions.UserExistsException;
 import model.*;
 import my_exceptions.UserNotExistsExcepiton;
@@ -17,7 +21,7 @@ import java.util.List;
 
 public class Controller {
 
-    private Token connectedUser;
+    private int connectedUser = 701;
     private LikesDAO likes;
     private MessageDAO messages;
     private PublicationDAO publications;
@@ -35,7 +39,7 @@ public class Controller {
      */
 
     @Inject
-    public Controller(LikesDAO likes, MessageDAO messages, PublicationDAO publications, UserDAO users, TokenDAO tokens) {
+    public Controller(LikesDAO likes, MessageDAO messages, PublicationDAO publications, UserDAO users, TokenDAO tokens) throws TokenNotExistsException {
         this.likes = likes;
         this.messages = messages;
         this.publications = publications;
@@ -52,7 +56,7 @@ public class Controller {
         try{
             users.insert(user);
         } catch (RollbackException ex) {
-            throw new UserExistsException();
+            throw new UserExistsException(ex);
         }
 
     }
@@ -66,29 +70,22 @@ public class Controller {
     public boolean login(String json) throws UserNotExistsExcepiton, WrongPasswordException {
         User user;
         Gson gson = new Gson();
-        user = users.getUserByUsername(gson.fromJson(json, User.class).getUsername());
+        user = users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername());
         if (user == null) {
             return false;
-        } else if (user.getPassword().compareTo(gson.fromJson(json, User.class).getPassword()) != 0) {
+        } else if (user.getPassword().compareTo(gson.fromJson(json, UserDTO.class).getPassword()) != 0) {
             throw new WrongPasswordException();
         } else {
             Token token = new Token(user);
             tokens.insert(token);
-            connectedUser = token;
             return true;
         }
     }
 
-    /**
-     * SendMessage method it's used to create and send a message.
-     *
-     * @param toUser  The receiver of the message.
-     * @param content The content of the message.
-     */
-
-    public void sendMessage(String toUser, String content) throws UserNotExistsExcepiton {
-        User user = users.getUserByUsername(toUser);
-        Message message = new Message(content, connectedUser.getUser(), user);
+    public void sendMessage(String json) throws UserNotExistsExcepiton, TokenNotExistsException {
+        Gson gson = new Gson();
+        Message message =  new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(connectedUser).getUser(),
+                users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername()) );
         messages.insert(message);
     }
 
@@ -98,18 +95,13 @@ public class Controller {
      * @return List of messages.
      */
 
-    public List<Message> getMessages() {
-        return messages.getRecvMessage(connectedUser.getUser());
+    public List<Message> getMessages(int token) throws TokenNotExistsException {
+        return messages.getRecvMessage(tokens.getTokenById(token).getUser());
     }
 
-    /**
-     * CreatePost method create a post.
-     *
-     * @param content The content of the post.
-     */
-
-    public void createPost(String content) {
-        Post post = new Post(content, connectedUser.getUser());
+    public void createPost(String json) throws TokenNotExistsException {
+        Gson gson = new Gson();
+        Post post = new Post(gson.fromJson(json, PublicationDTO.class).getContent(), tokens.getTokenById(701).getUser());
         publications.insert(post);
     }
 
@@ -119,8 +111,8 @@ public class Controller {
      * @return List of posts.
      */
 
-    public List<Publication> getPosts() {
-        return publications.getPostsByUser(connectedUser.getUser());
+    public List<Publication> getPosts(int token) throws TokenNotExistsException {
+        return publications.getPostsByUser(tokens.getTokenById(token).getUser());
     }
 
     /**
@@ -130,8 +122,8 @@ public class Controller {
      * @param id      The id of the post to be commented.
      */
 
-    public void commentPost(String content, int id) {
-        Comment comment = new Comment(connectedUser.getUser(), content, publications.getPublicationById(id));
+    public void commentPost(String content, int id) throws TokenNotExistsException {
+        Comment comment = new Comment(tokens.getTokenById(connectedUser).getUser(), content, publications.getPublicationById(id));
         publications.insert(comment);
     }
 
@@ -152,9 +144,13 @@ public class Controller {
      * @param id Id of the publication to like.
      */
 
-    public void likePublication(int id) {
-        Likes like = new Likes(publications.getPublicationById(id), connectedUser.getUser());
+    public void likePublication(int id) throws TokenNotExistsException {
+        Likes like = new Likes(publications.getPublicationById(id), tokens.getTokenById(connectedUser).getUser());
         likes.insert(like);
+    }
+
+    public List<Likes> getLikesForPublciation(Publication publication) {
+        return likes.getLikesForPublication(publication);
     }
 
 }
