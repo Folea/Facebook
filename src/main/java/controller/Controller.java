@@ -7,10 +7,7 @@ import dto.MessageDTO;
 import dto.PublicationDTO;
 import dto.UserDTO;
 import model.*;
-import my_exceptions.TokenNotExistsException;
-import my_exceptions.UserExistsException;
-import my_exceptions.UserNotExistsExcepiton;
-import my_exceptions.WrongPasswordException;
+import my_exceptions.*;
 
 import javax.persistence.RollbackException;
 import java.util.List;
@@ -117,15 +114,11 @@ public class Controller {
         return publications.getPostsByUser(tokens.getTokenById(token).getUser());
     }
 
-    /**
-     * CommentPost method it's used to comment a post.
-     *
-     * @param content The comment of the post.
-     * @param id      The id of the post to be commented.
-     */
 
-    public void commentPost(String content, int id) throws TokenNotExistsException {
-        Comment comment = new Comment(tokens.getTokenById(connectedUser).getUser(), content, publications.getPublicationById(id));
+    public void commentPost(String json) throws TokenNotExistsException, PublicationNotExistException {
+        Gson gson = new Gson();
+        Comment comment = new Comment(tokens.getTokenById(connectedUser).getUser(), gson.fromJson(json,
+                PublicationDTO.class).getContent(), publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()));
         publications.insert(comment);
     }
 
@@ -140,14 +133,10 @@ public class Controller {
         return publications.getCommentByPost(publication);
     }
 
-    /**
-     * LikePublication method it's used to like a publication.
-     *
-     * @param id Id of the publication to like.
-     */
 
-    public void likePublication(int id) throws TokenNotExistsException {
-        Likes like = new Likes(publications.getPublicationById(id), tokens.getTokenById(connectedUser).getUser());
+    public void likePublication(String json) throws TokenNotExistsException, PublicationNotExistException {
+        Gson gson = new Gson();
+        Likes like = new Likes(publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()), tokens.getTokenById(connectedUser).getUser());
         likes.insert(like);
     }
 

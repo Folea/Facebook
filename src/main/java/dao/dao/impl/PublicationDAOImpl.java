@@ -6,8 +6,10 @@ import com.google.inject.persist.Transactional;
 import dao.PublicationDAO;
 import model.Publication;
 import model.User;
+import my_exceptions.PublicationNotExistException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -47,10 +49,14 @@ public class PublicationDAOImpl implements PublicationDAO {
 
     @Override
     @Transactional
-    public Publication getPublicationById(int id) {
-        TypedQuery<Publication> q = em.createNamedQuery("Publication.getPublicationById", Publication.class);
-        q.setParameter("publication", id);
-        return q.getSingleResult();
+    public Publication getPublicationById(int id) throws PublicationNotExistException {
+        try {
+            TypedQuery<Publication> q = em.createNamedQuery("Publication.getPublicationById", Publication.class);
+            q.setParameter("publication", id);
+            return q.getSingleResult();
+        } catch (NoResultException ex) {
+            throw new PublicationNotExistException(ex);
+        }
     }
 
     /**

@@ -6,9 +6,6 @@ public class PublicationDTO {
     private int post;
     private int likes;
 
-    public PublicationDTO() {
-    }
-
     public PublicationDTO(String content, int likes) {
         this.content = content;
         this.likes = likes;

@@ -2,6 +2,7 @@ package dao;
 
 import model.Publication;
 import model.User;
+import my_exceptions.PublicationNotExistException;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface PublicationDAO {
 
     public void insert(Publication publication);
 
-    public Publication getPublicationById(int id);
+    public Publication getPublicationById(int id) throws PublicationNotExistException;
 
     public List<Publication> getPostsByUser(User user);
 

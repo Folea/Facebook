@@ -61,6 +61,5 @@ public class PostService {
         } catch (TokenNotExistsException ex) {
             return gson.toJson("The user is not connected");
         }
-
     }
 }
