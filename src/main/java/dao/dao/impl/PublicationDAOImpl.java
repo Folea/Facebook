@@ -49,6 +49,18 @@ public class PublicationDAOImpl implements PublicationDAO {
 
     @Override
     @Transactional
+    public Publication getPublicationByIdAndUser(int id, int user) throws PublicationNotExistException {
+        try {
+            TypedQuery<Publication> q = em.createNamedQuery("Publication.getPublicationByIdAndUser", Publication.class);
+            q.setParameter("publication", id);
+            q.setParameter("user", user);
+            return q.getSingleResult();
+        } catch (NoResultException ex) {
+            throw new PublicationNotExistException(ex);
+        }
+    }
+
+    @Override
     public Publication getPublicationById(int id) throws PublicationNotExistException {
         try {
             TypedQuery<Publication> q = em.createNamedQuery("Publication.getPublicationById", Publication.class);

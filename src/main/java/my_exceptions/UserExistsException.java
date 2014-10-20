@@ -1,7 +1,8 @@
 package my_exceptions;
 
 /**
- * Created by cristian.folea on 16.10.2014.
+ * UserExistsException it's a exception that represents a database error and it's thrown when a user to persist
+ * already exist.
  */
 public class UserExistsException extends Exception {
     public UserExistsException(Exception ex) {

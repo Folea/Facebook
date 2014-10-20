@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
+import dto.ReturnDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
 import my_exceptions.UserNotExistsException;
@@ -28,8 +29,8 @@ public class Login {
         Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
-            controller.login(json);
-            return gson.toJson("User logged successful");
+            ReturnDTO returnDTO = new ReturnDTO(controller.login(json), "User logged successful");
+            return gson.toJson(returnDTO, ReturnDTO.class);
         } catch (UserNotExistsException ex) {
             return gson.toJson("The user doesn't exist");
         } catch (WrongPasswordException ex) {

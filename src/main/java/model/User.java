@@ -2,6 +2,10 @@ package model;
 
 import javax.persistence.*;
 
+/**
+ * User represents a user.
+ */
+
 @Entity
 @NamedQueries({
         @NamedQuery(name = "User.getUserById", query = "select u from User as u where u.id = :user"),
@@ -41,5 +45,9 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -6,8 +6,10 @@ import com.google.inject.persist.Transactional;
 import dao.MessageDAO;
 import model.Message;
 import model.User;
+import my_exceptions.MessageNotExistsException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -50,5 +52,17 @@ public class MessageDAOImpl implements MessageDAO {
         TypedQuery<Message> q = em.createNamedQuery("Message.getRecvMessages", Message.class);
         q.setParameter("user", user.getId());
         return q.getResultList();
+    }
+
+    @Override
+    public Message getMessageById(int id, int user) throws MessageNotExistsException {
+        try {
+            TypedQuery<Message> q = em.createNamedQuery("Message.getMessageById", Message.class);
+            q.setParameter("id", id);
+            q.setParameter("user", user);
+            return q.getSingleResult();
+        } catch (NoResultException ex) {
+            throw new MessageNotExistsException(ex);
+        }
     }
 }

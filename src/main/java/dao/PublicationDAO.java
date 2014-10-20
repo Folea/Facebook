@@ -10,6 +10,8 @@ public interface PublicationDAO {
 
     public void insert(Publication publication);
 
+    public Publication getPublicationByIdAndUser(int id, int user) throws PublicationNotExistException;
+
     public Publication getPublicationById(int id) throws PublicationNotExistException;
 
     public List<Publication> getPostsByUser(User user);

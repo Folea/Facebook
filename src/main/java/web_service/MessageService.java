@@ -6,9 +6,11 @@ import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
 import dto.MessageDTO;
+import dto.ReturnDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
 import model.Message;
+import my_exceptions.MessageNotExistsException;
 import my_exceptions.TokenNotExistsException;
 import my_exceptions.UserNotExistsException;
 
@@ -43,14 +45,14 @@ public class MessageService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String sendMessage(String json) {
+    public String sendMessage(String json, @QueryParam("token") int token) {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
-            controller.sendMessage(json);
-            return gson.toJson("Message send");
+            ReturnDTO returnDTO = new ReturnDTO(controller.sendMessage(json, token), "Message send");
+            return gson.toJson(returnDTO, ReturnDTO.class);
         } catch (UserNotExistsException ex) {
             return gson.toJson("The user doesn't exist");
         } catch (TokenNotExistsException ex) {
@@ -58,9 +60,24 @@ public class MessageService {
         }
     }
 
-    /*@GET
+    @GET
     @Path("/{id}")
-    public String getMessage(@PathParam("id") int id) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getMessage(@PathParam("id") int id, @QueryParam("token") int token) {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
+        Gson gson = new Gson();
+        try {
+            Message message = controller.getMessageById(id, token);
+            MessageDTO messageDTO = new MessageDTO(message.getToUser().getUsername(), controller.getUserByToken(token).getUsername(),
+                    message.getContent());
+            return gson.toJson(messageDTO, MessageDTO.class);
+        } catch (MessageNotExistsException ex) {
+            return gson.toJson("The message doesn't exist");
+        } catch (TokenNotExistsException ex) {
+            return gson.toJson("Must be logged");
+        }
 
-    }*/
+    }
 }

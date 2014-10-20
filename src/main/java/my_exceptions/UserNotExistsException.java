@@ -1,8 +1,9 @@
 package my_exceptions;
 
 /**
- * Created by cristian.folea on 16.10.2014.
+ * UserNotExistsException it's used to represent a database exception when a user that is ask for doesn't exist.
  */
+
 public class UserNotExistsException extends Exception {
     public UserNotExistsException(Exception ex) {
         super(ex);

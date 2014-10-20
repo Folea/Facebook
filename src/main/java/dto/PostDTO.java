@@ -3,6 +3,10 @@ package dto;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The PostDTO class it's used to transfer data between the received json and the DB.
+ */
+
 public class PostDTO {
 
     private String fromUser;
@@ -22,5 +26,21 @@ public class PostDTO {
 
     public void addComment(PublicationDTO comment) {
         comments.add(comment);
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(String fromUser) {
+        this.fromUser = fromUser;
     }
 }

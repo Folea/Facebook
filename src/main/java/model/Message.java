@@ -2,8 +2,15 @@ package model;
 
 import javax.persistence.*;
 
+/**
+ * Message represents a message.
+ */
+
 @Entity
-@NamedQuery(name = "Message.getRecvMessages", query = "select m from Message as m where m.toUser.id = :user")
+@NamedQueries({
+        @NamedQuery(name = "Message.getRecvMessages", query = "select m from Message as m where m.toUser.id = :user"),
+        @NamedQuery(name = "Message.getMessageById", query = "select m from Message as m where m.id = :id and m.toUser.id = :user")
+})
 public class Message {
 
     @Id
@@ -35,5 +42,9 @@ public class Message {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -1,13 +1,17 @@
 package model;
 
+
 import javax.persistence.*;
+
+/**
+ * Token represents a token.
+ */
 
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Token.getTokenById", query = "select t from Token as t where t.GUID = :guid"),
         @NamedQuery(name = "Token.removeTokensUser", query = "delete from Token t where t.user.id = :user")
 })
-
 public class Token {
 
     @Id
@@ -26,5 +30,13 @@ public class Token {
 
     public User getUser() {
         return user;
+    }
+
+    public int getGUID() {
+        return GUID;
+    }
+
+    public void setGUID(int GUID) {
+        this.GUID = GUID;
     }
 }

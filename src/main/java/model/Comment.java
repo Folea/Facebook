@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+/**
+ * Comment class represents a comment.
+ */
+
 @Entity
 @DiscriminatorValue(value = "COMMENT")
 public class Comment extends Publication {
@@ -22,5 +26,13 @@ public class Comment extends Publication {
         super(content);
         this.fromUser = fromUser;
         this.publication = publication;
+    }
+
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
     }
 }

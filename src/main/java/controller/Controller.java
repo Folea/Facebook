@@ -18,7 +18,6 @@ import java.util.List;
 
 public class Controller {
 
-    private int connectedUser = 701;
     private LikesDAO likes;
     private MessageDAO messages;
     private PublicationDAO publications;
@@ -44,9 +43,24 @@ public class Controller {
         this.tokens = tokens;
     }
 
+    /**
+     * getUserByToken it's used to get a User that a token represents.
+     *
+     * @param token The token for which return the user.
+     * @return The user for the specify token.
+     * @throws TokenNotExistsException If the id doesn't exist, throws this exception
+     */
+
     public User getUserByToken(int token) throws TokenNotExistsException {
         return tokens.getTokenById(token).getUser();
     }
+
+    /**
+     * register it's used to register a used. The information about the user to register it's provide by a JSON.
+     *
+     * @param json The JSON that contains the user information.
+     * @throws UserExistsException If the user already exists.
+     */
 
     public void register(String json) throws UserExistsException {
         Gson gson = new Gson();
@@ -61,71 +75,140 @@ public class Controller {
     }
 
     /**
-     * Login method it's used to login into the application. If the user exists create a token and assigns it to the user.
+     * Login method it's used to login into the application.The user information is provided by a JSON.
      *
-     * @return Returns true if the user exists and the password match, otherwise returns false.
+     * @param json The JSON that contains the user information.
+     * @return If the user exists and the password match return the user id.
+     * @throws UserNotExistsException If the user doesn't exist in the DB.
+     * @throws WrongPasswordException If the passwo
      */
 
-    public boolean login(String json) throws UserNotExistsException, WrongPasswordException {
+    public int login(String json) throws UserNotExistsException, WrongPasswordException {
         User user;
         Gson gson = new Gson();
         user = users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername());
-        if (user == null) {
-            return false;
-        } else if (user.getPassword().compareTo(gson.fromJson(json, UserDTO.class).getPassword()) != 0) {
+        if (user.getPassword().compareTo(gson.fromJson(json, UserDTO.class).getPassword()) != 0) {
             throw new WrongPasswordException();
         } else {
             Token token = new Token(user);
             tokens.insert(token);
-            return true;
+            return user.getId();
         }
     }
 
-    public void sendMessage(String json) throws UserNotExistsException, TokenNotExistsException {
+    /**
+     * sendMesage it's used to send a message that contains the information extracted from the JSON. The token
+     * it's used to identify the user that wants to send the message.
+     *
+     * @param json  The JSON that contains the message information.
+     * @param token The token which identify the user which want to send the message.
+     * @return return the id from the send message.
+     * @throws UserNotExistsException  If the user doesn't exist in the DB.
+     * @throws TokenNotExistsException If the token doesn't exist in the DB.
+     */
+
+    public int sendMessage(String json, int token) throws UserNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
-        Message message = new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(connectedUser).getUser(),
+        Message message = new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(token).getUser(),
                 users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername()));
         messages.insert(message);
+        return message.getId();
     }
 
     /**
-     * GetMessages method returns all the messages received by the logged user.
+     * getMessages retrieve the messages received by the user connected with the token.
      *
-     * @return List of messages.
+     * @param token The token that identify the connected user.
+     * @return returns a list of messages.
+     * @throws TokenNotExistsException If the tokens doesn't exist in the DB.
      */
 
     public List<Message> getMessages(int token) throws TokenNotExistsException {
         return messages.getRecvMessage(tokens.getTokenById(token).getUser());
     }
 
-    public void createPost(String json) throws TokenNotExistsException {
-        Gson gson = new Gson();
-        Post post = new Post(gson.fromJson(json, PublicationDTO.class).getContent(), tokens.getTokenById(701).getUser());
-        publications.insert(post);
+    /**
+     * getMessageById receive the message with the specify id.
+     *
+     * @param id    The id of the message to retrieve.
+     * @param token The token of the connected user.
+     * @return A message.
+     * @throws TokenNotExistsException   If the token doesn't exist in the DB.
+     * @throws MessageNotExistsException If the message doesn't exist in the DB.
+     */
+
+    public Message getMessageById(int id, int token) throws TokenNotExistsException, MessageNotExistsException {
+        User user = tokens.getTokenById(token).getUser();
+        return messages.getMessageById(id, user.getId());
     }
 
     /**
-     * GetPost method returns all the post posted by the connected user.
+     * createPost creates a post with the information provides by the JSON. The user that creates the post is the user
+     * that march with the token.
      *
-     * @return List of posts.
+     * @param json  Post data.
+     * @param token The user token.
+     * @return The id of the created post.
+     * @throws TokenNotExistsException If the token doesn't exist.
+     */
+
+    public int createPost(String json, int token) throws TokenNotExistsException {
+        Gson gson = new Gson();
+        Post post = new Post(gson.fromJson(json, PublicationDTO.class).getContent(), tokens.getTokenById(token).getUser());
+        publications.insert(post);
+        return post.getId();
+    }
+
+    /**
+     * getPostByIdAndUser retrieves a publication(Post or Comment) identified by the publication id and the connected
+     * user that it's identified by the token.
+     *
+     * @param id    The id of the publication.
+     * @param token The token that identify the connected user.
+     * @return The publication with the specified id.
+     * @throws TokenNotExistsException      If the token doesn't exist in the DB.
+     * @throws PublicationNotExistException If the publication doesn't exist in the DB.
+     */
+
+    public Publication getPostByIdAndUser(int id, int token) throws TokenNotExistsException, PublicationNotExistException {
+        User user = tokens.getTokenById(token).getUser();
+        return publications.getPublicationByIdAndUser(id, user.getId());
+    }
+
+    /**
+     * getPost returns al the the post posted by the connected user.
+     *
+     * @param token The token that identify the connected user.
+     * @return List of post.
+     * @throws TokenNotExistsException If the token doesn't exist in the DB.
      */
 
     public List<Publication> getPosts(int token) throws TokenNotExistsException {
         return publications.getPostsByUser(tokens.getTokenById(token).getUser());
     }
 
+    /**
+     * commentPost it's used to comment a specified post with the content that the JSON provides.
+     *
+     * @param json  The JSOn that contains the id of the post to be commented and the content of the comment.
+     * @param token The token that identify the connected user.
+     * @return The id of the comment.
+     * @throws TokenNotExistsException      If the token doesn't exist in the DB.
+     * @throws PublicationNotExistException If the publication doesn't exist in the DB.
+     */
 
-    public void commentPost(String json) throws TokenNotExistsException, PublicationNotExistException {
+    public int commentPost(String json, int token) throws TokenNotExistsException, PublicationNotExistException {
         Gson gson = new Gson();
-        Comment comment = new Comment(tokens.getTokenById(connectedUser).getUser(), gson.fromJson(json,
+        Comment comment = new Comment(tokens.getTokenById(token).getUser(), gson.fromJson(json,
                 PublicationDTO.class).getContent(), publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()));
         publications.insert(comment);
+        return comment.getId();
     }
 
     /**
-     * GetComments method it's used to get the comments for a publication.
+     * getComments returns all the comments for a specified publication.
      *
-     * @param publication The publication for which to get the comments.
+     * @param publication The publication for which get the comments.
      * @return List of comments.
      */
 
@@ -133,12 +216,35 @@ public class Controller {
         return publications.getCommentByPost(publication);
     }
 
+    /**
+     * likePublication it's used to put a like for a publication whose id it's in JSON.
+     *
+     * @param json  The Json that contains the like content.
+     * @param token The token that identify the connected user.
+     * @return The id of the created like.
+     * @throws TokenNotExistsException      If the token doesn't exist.
+     * @throws PublicationNotExistException If the publication doesn't exist.
+     * @throws LikeAlreadyExistException    If the like already exist.
+     */
 
-    public void likePublication(String json) throws TokenNotExistsException, PublicationNotExistException {
+    public int likePublication(String json, int token) throws TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
         Gson gson = new Gson();
-        Likes like = new Likes(publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()), tokens.getTokenById(connectedUser).getUser());
-        likes.insert(like);
+        Likes like = new Likes(publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()), tokens.getTokenById(token).getUser());
+        try {
+            likes.insert(like);
+            ;
+        } catch (RollbackException ex) {
+            throw new LikeAlreadyExistException(ex);
+        }
+        return like.getId();
     }
+
+    /**
+     * getLikesForPublication retrieves the likes for a publication.
+     *
+     * @param publication the publication for which retrieves the likes.
+     * @return List of likes.
+     */
 
     public List<Likes> getLikesForPublication(Publication publication) {
         return likes.getLikesForPublication(publication);

@@ -3,20 +3,38 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
+import dto.PublicationDTO;
+import dto.UserDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
-import my_exceptions.TokenNotExistsException;
+import my_exceptions.*;
 
 
 public class Main {
 
-    public static void main(String[] args0) throws TokenNotExistsException {
+    public static void main(String[] args0) throws TokenNotExistsException, MessageNotExistsException, UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistException {
+
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
-        //PublicationDTO pub = new PublicationDTO("aaaaa", Integer.toString(2), Integer.toString(2));
-        //System.out.println(pub.getContent() + "     " + pub.getPost());
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setPassword("1234");
+        userDTO.setUsername("Folea");
+        userDTO.setName("Folea");
+
+        /*controller.register(gson.toJson(userDTO, UserDTO.class));
+        controller.login(gson.toJson(userDTO, UserDTO.class));*/
+
+
+       /* PostDTO postDTO  = new PostDTO();
+        postDTO.setContent("sssa");
+        controller.createPost(gson.toJson(postDTO, PostDTO.class), 1);*/
+
+        PublicationDTO publicationDTO = new PublicationDTO();
+        publicationDTO.setPost(201);
+        controller.likePublication(gson.toJson(publicationDTO), 1);
     }
 
 }

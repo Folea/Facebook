@@ -1,8 +1,9 @@
 package dto;
 
 /**
- * Created by cristian.folea on 16.10.2014.
+ * The MessageDTO class it's used to transfer data between the received json and the DB.
  */
+
 public class MessageDTO {
 
     private String toUser;
@@ -20,6 +21,10 @@ public class MessageDTO {
 
     public String getToUser() {
         return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 
     public String getFromUser() {
