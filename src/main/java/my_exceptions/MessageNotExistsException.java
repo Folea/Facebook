@@ -6,6 +6,10 @@ package my_exceptions;
 
 public class MessageNotExistsException extends Exception {
 
+    public MessageNotExistsException() {
+
+    }
+
     public MessageNotExistsException(Exception ex) {
         super(ex);
     }

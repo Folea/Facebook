@@ -17,13 +17,19 @@ import javax.ws.rs.core.MediaType;
 @Path("/comment")
 public class CommentPost {
 
+    Controller controller;
+
+    public CommentPost(){
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        controller = injector.getInstance(Controller.class);
+    }
+
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String commentPost(String json, @QueryParam("token") int token) {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
             ReturnDTO returnDTO = new ReturnDTO(controller.commentPost(json, token), "Commented");
@@ -33,5 +39,9 @@ public class CommentPost {
         } catch (PublicationNotExistException ex) {
             return gson.toJson("Publication not exist");
         }
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }

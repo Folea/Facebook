@@ -7,6 +7,9 @@ package my_exceptions;
 
 public class LikeAlreadyExistException extends Exception {
 
+    public LikeAlreadyExistException() {
+    }
+
     public LikeAlreadyExistException(Exception ex) {
         super(ex);
     }

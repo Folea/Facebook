@@ -23,12 +23,17 @@ import java.util.List;
 @Path("/publication")
 public class PostService {
 
+    Controller controller;
+
+    public PostService() {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        controller = injector.getInstance(Controller.class);
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getPosts(@QueryParam("token") int token) {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
             List<Publication> listPosts = controller.getPosts(token);
@@ -45,7 +50,7 @@ public class PostService {
             }
             return gson.toJson(listPostsDTO, List.class);
         } catch (TokenNotExistsException ex) {
-            return gson.toJson("Token is incorrect " + token);
+            return gson.toJson("Token is incorrect ");
         }
     }
 
@@ -53,9 +58,6 @@ public class PostService {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getPostById(@PathParam("id") int id, @QueryParam("token") int token) {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
             Publication post = controller.getPostByIdAndUser(id, token);
@@ -77,9 +79,6 @@ public class PostService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String createPost(String json, @QueryParam("token") int token) {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
             ReturnDTO returnDTO = new ReturnDTO(controller.createPost(json, token), "Post has been created successful");
@@ -87,5 +86,9 @@ public class PostService {
         } catch (TokenNotExistsException ex) {
             return gson.toJson("The user is not connected");
         }
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }

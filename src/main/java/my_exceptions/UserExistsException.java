@@ -5,6 +5,11 @@ package my_exceptions;
  * already exist.
  */
 public class UserExistsException extends Exception {
+
+    public UserExistsException() {
+
+    }
+
     public UserExistsException(Exception ex) {
         super(ex);
     }

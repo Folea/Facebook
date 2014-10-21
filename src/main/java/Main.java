@@ -24,17 +24,17 @@ public class Main {
         userDTO.setUsername("Folea");
         userDTO.setName("Folea");
 
-        /*controller.register(gson.toJson(userDTO, UserDTO.class));
-        controller.login(gson.toJson(userDTO, UserDTO.class));*/
+        controller.register(gson.toJson(userDTO, UserDTO.class));
+        controller.login(gson.toJson(userDTO, UserDTO.class));
 
 
        /* PostDTO postDTO  = new PostDTO();
         postDTO.setContent("sssa");
         controller.createPost(gson.toJson(postDTO, PostDTO.class), 1);*/
 
-        PublicationDTO publicationDTO = new PublicationDTO();
+        /*PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setPost(201);
-        controller.likePublication(gson.toJson(publicationDTO), 1);
+        controller.likePublication(gson.toJson(publicationDTO), 1);*/
     }
 
 }

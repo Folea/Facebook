@@ -5,6 +5,9 @@ package my_exceptions;
  */
 
 public class TokenNotExistsException extends Exception {
+
+    public TokenNotExistsException() {}
+
     public TokenNotExistsException(Exception ex) {
         super(ex);
     }

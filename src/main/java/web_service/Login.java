@@ -20,13 +20,18 @@ import javax.ws.rs.core.MediaType;
 @Path("/login")
 public class Login {
 
+    Controller controller;
+
+    public Login() {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        controller = injector.getInstance(Controller.class);
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String login(String json) {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
             ReturnDTO returnDTO = new ReturnDTO(controller.login(json), "User logged successful");
@@ -36,5 +41,9 @@ public class Login {
         } catch (WrongPasswordException ex) {
             return gson.toJson("The password is wrong");
         }
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }

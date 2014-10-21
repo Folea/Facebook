@@ -110,7 +110,7 @@ public class Controller {
     public int sendMessage(String json, int token) throws UserNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
         Message message = new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(token).getUser(),
-                users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername()));
+                users.getUserByUsername(gson.fromJson(json, MessageDTO.class).getToUser()));
         messages.insert(message);
         return message.getId();
     }
@@ -232,7 +232,6 @@ public class Controller {
         Likes like = new Likes(publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()), tokens.getTokenById(token).getUser());
         try {
             likes.insert(like);
-            ;
         } catch (RollbackException ex) {
             throw new LikeAlreadyExistException(ex);
         }
@@ -249,5 +248,4 @@ public class Controller {
     public List<Likes> getLikesForPublication(Publication publication) {
         return likes.getLikesForPublication(publication);
     }
-
 }

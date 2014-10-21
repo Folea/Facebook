@@ -18,13 +18,18 @@ import javax.ws.rs.core.MediaType;
 @Path("/like")
 public class LikePublication {
 
+    Controller controller;
+
+    public LikePublication(){
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        controller = injector.getInstance(Controller.class);
+    }
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String likePost(String json, @QueryParam("token") int token) {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
             ReturnDTO returnDTO = new ReturnDTO(controller.likePublication(json, token), "Like");
@@ -39,4 +44,7 @@ public class LikePublication {
 
     }
 
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
 }

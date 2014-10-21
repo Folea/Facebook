@@ -34,4 +34,12 @@ public class MessageDTO {
     public String getContent() {
         return content;
     }
+
+    public void setFromUser(String fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

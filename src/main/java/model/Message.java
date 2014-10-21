@@ -47,4 +47,20 @@ public class Message {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public void setToUser(User toUser) {
+        this.toUser = toUser;
+    }
 }

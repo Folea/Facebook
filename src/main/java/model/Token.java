@@ -39,4 +39,8 @@ public class Token {
     public void setGUID(int GUID) {
         this.GUID = GUID;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
