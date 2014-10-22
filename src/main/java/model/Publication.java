@@ -40,4 +40,5 @@ public class Publication {
     public void setId(int id) {
         this.id = id;
     }
+
 }

@@ -18,13 +18,18 @@ import javax.ws.rs.core.MediaType;
 @Path("/register")
 public class Register {
 
+    Controller controller;
+
+    public Register() {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        controller = injector.getInstance(Controller.class);
+    }
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String register(String json) {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();
         try {
             controller.register(json);
@@ -32,5 +37,9 @@ public class Register {
         } catch (UserExistsException ex) {
             return gson.toJson("Register fails");
         }
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 }

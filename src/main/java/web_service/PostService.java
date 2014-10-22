@@ -50,7 +50,7 @@ public class PostService {
             }
             return gson.toJson(listPostsDTO, List.class);
         } catch (TokenNotExistsException ex) {
-            return gson.toJson("Token is incorrect ");
+            return gson.toJson("Token is incorrect " + token);
         }
     }
 

@@ -27,7 +27,6 @@ public class UserDAOImpl implements UserDAO {
     @Transactional
     public void insert(User user) {
         em.persist(user);
-
     }
 
     @Override
