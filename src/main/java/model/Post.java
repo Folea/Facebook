@@ -26,4 +26,5 @@ public class Post extends Publication {
     public void setFromUser(User fromUser) {
         this.fromUser = fromUser;
     }
+
 }

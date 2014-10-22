@@ -9,8 +9,4 @@ public class WrongPasswordException extends Exception {
 
     public WrongPasswordException() {
     }
-
-    public WrongPasswordException(Exception ex) {
-        super(ex);
-    }
 }
