@@ -10,9 +10,7 @@ import my_exceptions.TokenNotExistsException;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class LikePublicationTest {
@@ -21,7 +19,7 @@ public class LikePublicationTest {
     LikePublication likePublication;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         controller = createNiceMock(Controller.class);
         likePublication = new LikePublication();
     }

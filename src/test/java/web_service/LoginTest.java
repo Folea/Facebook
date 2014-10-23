@@ -7,13 +7,9 @@ import dto.UserDTO;
 import my_exceptions.UserNotExistsException;
 import my_exceptions.WrongPasswordException;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import web_service.Login;
 
-import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class LoginTest {

@@ -92,7 +92,7 @@ public class Controller {
         } else {
             Token token = new Token(user);
             tokens.insert(token);
-            return user.getId();
+            return token.getGUID();
         }
     }
 

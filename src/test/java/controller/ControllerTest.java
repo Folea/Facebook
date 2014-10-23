@@ -1,7 +1,6 @@
 package controller;
 
 import com.google.gson.Gson;
-import controller.Controller;
 import dao.*;
 import dto.MessageDTO;
 import dto.PublicationDTO;
@@ -12,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.RollbackException;
-
 import java.util.LinkedList;
 
 import static org.easymock.EasyMock.*;
@@ -84,7 +82,8 @@ public class ControllerTest {
         expect(users.getUserByUsername("Folea")).andReturn(user);
         replay(users);
 
-        assertEquals(5, controller.login(gson.toJson(userDTO)));
+        isA(Integer.class);
+        assertEquals(0, controller.login(gson.toJson(userDTO)));
     }
 
     @Test(expected = UserNotExistsException.class)
@@ -128,7 +127,7 @@ public class ControllerTest {
         controller.sendMessage(gson.toJson(messageDTO), 5);
     }
 
-    @Test (expected = UserNotExistsException.class)
+    @Test(expected = UserNotExistsException.class)
     public void sendMessageTestFail1() throws UserNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
         MessageDTO messageDTO = new MessageDTO();
@@ -146,7 +145,7 @@ public class ControllerTest {
         controller.sendMessage(gson.toJson(messageDTO), 5);
     }
 
-    @Test (expected = TokenNotExistsException.class)
+    @Test(expected = TokenNotExistsException.class)
     public void sendMessageTestFail2() throws UserNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
         MessageDTO messageDTO = new MessageDTO();
@@ -203,7 +202,7 @@ public class ControllerTest {
         Message message = new Message("Hello", new User("Folea", "Folea", "1234"), new User("Cristi", "Cristi", "1234"));
         message.setId(10);
         expect(tokens.getTokenById(5)).andReturn(token);
-        expect(messages.getMessageById(10,1)).andReturn(message);
+        expect(messages.getMessageById(10, 1)).andReturn(message);
 
         replay(tokens);
         replay(messages);
@@ -220,7 +219,7 @@ public class ControllerTest {
         Message message = new Message("Hello", new User("Folea", "Folea", "1234"), new User("Cristi", "Cristi", "1234"));
         message.setId(10);
         expect(tokens.getTokenById(5)).andThrow(new TokenNotExistsException());
-        expect(messages.getMessageById(10,1)).andReturn(message);
+        expect(messages.getMessageById(10, 1)).andReturn(message);
 
         replay(tokens);
         replay(messages);
@@ -237,7 +236,7 @@ public class ControllerTest {
         Message message = new Message("Hello", new User("Folea", "Folea", "1234"), new User("Cristi", "Cristi", "1234"));
         message.setId(10);
         expect(tokens.getTokenById(5)).andReturn(token);
-        expect(messages.getMessageById(10,1)).andThrow(new MessageNotExistsException());
+        expect(messages.getMessageById(10, 1)).andThrow(new MessageNotExistsException());
 
         replay(tokens);
         replay(messages);
@@ -386,7 +385,7 @@ public class ControllerTest {
         publicationDTO.setContent("Hello");
         publicationDTO.setPost(10);
 
-        Post post =  new Post();
+        Post post = new Post();
         post.setId(10);
 
         expect(publications.getPublicationById(10)).andReturn(post);
@@ -410,7 +409,7 @@ public class ControllerTest {
         publicationDTO.setContent("Hello");
         publicationDTO.setPost(10);
 
-        Post post =  new Post();
+        Post post = new Post();
         post.setId(10);
 
         expect(publications.getPublicationById(10)).andReturn(post);
@@ -434,7 +433,7 @@ public class ControllerTest {
         publicationDTO.setContent("Hello");
         publicationDTO.setPost(10);
 
-        Post post =  new Post();
+        Post post = new Post();
         post.setId(10);
 
         expect(publications.getPublicationById(10)).andThrow(new PublicationNotExistException());
@@ -446,9 +445,9 @@ public class ControllerTest {
     }
 
     @Test
-    public void getCommentsSuccess(){
+    public void getCommentsSuccess() {
         User user = new User("Folea", "Folea", "1234");
-        Post post =  new Post();
+        Post post = new Post();
         post.setId(10);
         LinkedList<Publication> comments = new LinkedList<>();
         Comment comment = new Comment(user, "Hello", post);

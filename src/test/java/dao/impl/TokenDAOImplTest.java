@@ -1,7 +1,6 @@
 package dao.impl;
 
 import dao.dao.impl.TokenDAOImpl;
-import dao.dao.impl.UserDAOImpl;
 import model.Token;
 import model.User;
 import my_exceptions.TokenNotExistsException;
@@ -22,7 +21,7 @@ public class TokenDAOImplTest {
     TypedQuery<Token> query;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         em = createNiceMock(EntityManager.class);
         tokenDAOImpl = new TokenDAOImpl(em);
         query = createNiceMock(TypedQuery.class);

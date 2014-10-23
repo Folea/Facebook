@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1748558726">
+  <component name="DataSourceManagerImpl" format="xml" hash="3773377532">
     <data-source source="LOCAL" name="facebook" uuid="43d6451f-de1a-4f16-9e4a-f8ace76d69e1">
       <driver-ref>mysql</driver-ref>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
@@ -10,6 +10,16 @@
       <libraries>
         <library>
           <url>file://$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.33/mysql-connector-java-5.1.33.jar</url>
+        </library>
+      </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="h2" uuid="5e7977e6-30e9-4392-a018-58fe16ba03a4">
+      <driver-ref>h2.embedded</driver-ref>
+      <jdbc-driver>org.h2.Driver</jdbc-driver>
+      <jdbc-url>jdbc:h2:target/h2-1</jdbc-url>
+      <libraries>
+        <library>
+          <url>file://$MAVEN_REPOSITORY$/com/h2database/h2/1.4.182/h2-1.4.182.jar</url>
         </library>
       </libraries>
     </data-source>

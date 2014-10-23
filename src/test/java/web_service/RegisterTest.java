@@ -3,12 +3,9 @@ package web_service;
 import com.google.gson.Gson;
 import controller.Controller;
 import dto.UserDTO;
-import model.User;
 import my_exceptions.UserExistsException;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.persistence.RollbackException;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
@@ -19,7 +16,7 @@ public class RegisterTest {
     Controller controller;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         controller = createNiceMock(Controller.class);
         register = new Register();
     }

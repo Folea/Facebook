@@ -32,15 +32,15 @@ public class Token {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public int getGUID() {
         return GUID;
     }
 
     public void setGUID(int GUID) {
         this.GUID = GUID;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

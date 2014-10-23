@@ -20,9 +20,11 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="" />
         <datasource-mapping>
-          <factory-entry name="facebook" value="43d6451f-de1a-4f16-9e4a-f8ace76d69e1" />
+          <factory-entry name="facebook" />
+          <factory-entry name="h2" value="5e7977e6-30e9-4392-a018-58fe16ba03a4" />
+          <factory-entry name="h2-eclipselink" />
         </datasource-mapping>
-        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
+        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/in_memory_test/resources/META-INF/persistence.xml" />
       </configuration>
     </facet>
   </component>
@@ -33,6 +35,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/in_memory_test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/in_memory_test/resources" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -64,6 +68,7 @@
     <orderEntry type="library" name="Maven: asm:asm:3.1" level="project" />
     <orderEntry type="library" name="Maven: com.sun.jersey:jersey-core:1.8" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
+    <orderEntry type="library" name="Maven: com.h2database:h2:1.4.182" level="project" />
   </component>
 </module>
 

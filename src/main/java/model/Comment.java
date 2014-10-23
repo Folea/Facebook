@@ -35,4 +35,14 @@ public class Comment extends Publication {
     public void setFromUser(User fromUser) {
         this.fromUser = fromUser;
     }
+
+    public Publication getPublication() {
+        return publication;
+    }
+
+    public void setPublication(Publication publication) {
+        this.publication = publication;
+    }
+
+
 }

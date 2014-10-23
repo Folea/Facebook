@@ -8,11 +8,8 @@ import my_exceptions.PublicationNotExistException;
 import my_exceptions.TokenNotExistsException;
 import org.junit.Before;
 import org.junit.Test;
-import web_service.CommentPost;
 
-import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class CommentPostTest {
@@ -21,8 +18,8 @@ public class CommentPostTest {
     Controller controller;
 
     @Before
-    public void setUp(){
-        controller =  createNiceMock(Controller.class);
+    public void setUp() {
+        controller = createNiceMock(Controller.class);
         commentPost = new CommentPost();
 
     }

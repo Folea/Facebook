@@ -31,12 +31,12 @@ public class MessageDTO {
         return fromUser;
     }
 
-    public String getContent() {
-        return content;
-    }
-
     public void setFromUser(String fromUser) {
         this.fromUser = fromUser;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public void setContent(String content) {

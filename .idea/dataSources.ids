@@ -3,4 +3,7 @@
   <data-source source="LOCAL" name="facebook" uuid="43d6451f-de1a-4f16-9e4a-f8ace76d69e1">
     <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
   </data-source>
+  <data-source source="LOCAL" name="h2" uuid="5e7977e6-30e9-4392-a018-58fe16ba03a4">
+    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
+  </data-source>
 </component>

@@ -23,7 +23,7 @@ public class PostServiceTest {
     Controller controller;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         controller = createNiceMock(Controller.class);
         postService = new PostService();
     }
@@ -146,7 +146,7 @@ public class PostServiceTest {
 
         postService.setController(controller);
 
-        PostDTO postDTO = new PostDTO(( post).getFromUser().getUsername(), post.getContent(), likesPost.size());
+        PostDTO postDTO = new PostDTO((post).getFromUser().getUsername(), post.getContent(), likesPost.size());
         for (Publication c : comments) {
             PublicationDTO publicationDTO = new PublicationDTO(c.getContent(), likesComment.size());
             postDTO.addComment(publicationDTO);
@@ -184,7 +184,7 @@ public class PostServiceTest {
 
         postService.setController(controller);
 
-        PostDTO postDTO = new PostDTO(( post).getFromUser().getUsername(), post.getContent(), likesPost.size());
+        PostDTO postDTO = new PostDTO((post).getFromUser().getUsername(), post.getContent(), likesPost.size());
         for (Publication c : comments) {
             PublicationDTO publicationDTO = new PublicationDTO(c.getContent(), likesComment.size());
             postDTO.addComment(publicationDTO);
@@ -222,7 +222,7 @@ public class PostServiceTest {
 
         postService.setController(controller);
 
-        PostDTO postDTO = new PostDTO(( post).getFromUser().getUsername(), post.getContent(), likesPost.size());
+        PostDTO postDTO = new PostDTO((post).getFromUser().getUsername(), post.getContent(), likesPost.size());
         for (Publication c : comments) {
             PublicationDTO publicationDTO = new PublicationDTO(c.getContent(), likesComment.size());
             postDTO.addComment(publicationDTO);

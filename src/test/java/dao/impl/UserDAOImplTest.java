@@ -6,8 +6,10 @@ import my_exceptions.UserNotExistsException;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.*;
-
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.RollbackException;
+import javax.persistence.TypedQuery;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
@@ -78,7 +80,7 @@ public class UserDAOImplTest {
         replay(em);
         replay(query);
 
-        assertEquals(1 , userDAOImpl.getUserById(1).getId());
+        assertEquals(1, userDAOImpl.getUserById(1).getId());
     }
 
     @Test(expected = UserNotExistsException.class)
@@ -91,6 +93,6 @@ public class UserDAOImplTest {
         replay(em);
         replay(query);
 
-        assertEquals(1 , userDAOImpl.getUserById(1).getId());
+        assertEquals(1, userDAOImpl.getUserById(1).getId());
     }
 }

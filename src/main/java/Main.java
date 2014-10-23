@@ -3,7 +3,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
-import dto.PublicationDTO;
 import dto.UserDTO;
 import injector.MyInitializer;
 import injector.MyInjector;

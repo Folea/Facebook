@@ -5,21 +5,17 @@ import controller.Controller;
 import dto.MessageDTO;
 import dto.ReturnDTO;
 import model.Message;
-import model.Token;
 import model.User;
 import my_exceptions.MessageNotExistsException;
 import my_exceptions.TokenNotExistsException;
 import my_exceptions.UserNotExistsException;
 import org.junit.Before;
 import org.junit.Test;
-import web_service.MessageService;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class MessageServiceTest {
@@ -142,7 +138,7 @@ public class MessageServiceTest {
         replay(controller);
 
         messageService.setController(controller);
-        assertEquals(gson.toJson(messageDTO),messageService.getMessage(5, 1));
+        assertEquals(gson.toJson(messageDTO), messageService.getMessage(5, 1));
     }
 
     @Test
@@ -159,7 +155,7 @@ public class MessageServiceTest {
         replay(controller);
 
         messageService.setController(controller);
-        assertEquals(gson.toJson("Must be logged"),messageService.getMessage(5, 1));
+        assertEquals(gson.toJson("Must be logged"), messageService.getMessage(5, 1));
     }
 
     @Test
@@ -176,7 +172,7 @@ public class MessageServiceTest {
         replay(controller);
 
         messageService.setController(controller);
-        assertEquals(gson.toJson("The message doesn't exist"),messageService.getMessage(5, 1));
+        assertEquals(gson.toJson("The message doesn't exist"), messageService.getMessage(5, 1));
     }
 
 }

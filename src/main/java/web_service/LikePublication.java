@@ -20,7 +20,7 @@ public class LikePublication {
 
     Controller controller;
 
-    public LikePublication(){
+    public LikePublication() {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         controller = injector.getInstance(Controller.class);

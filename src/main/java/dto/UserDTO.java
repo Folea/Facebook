@@ -1,7 +1,5 @@
 package dto;
 
-import dao.UserDAO;
-
 /**
  * The UserDTO class it's used to transfer data between the received json and the DB
  */
@@ -16,7 +14,7 @@ public class UserDTO {
 
     }
 
-    public UserDTO(String username, String name, String password){
+    public UserDTO(String username, String name, String password) {
         this.username = username;
         this.name = name;
         this.password = password;

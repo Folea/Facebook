@@ -36,8 +36,16 @@ public class Message {
         return content;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public User getToUser() {
         return toUser;
+    }
+
+    public void setToUser(User toUser) {
+        this.toUser = toUser;
     }
 
     public int getId() {
@@ -48,10 +56,6 @@ public class Message {
         this.id = id;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public User getFromUser() {
         return fromUser;
     }
@@ -60,7 +64,27 @@ public class Message {
         this.fromUser = fromUser;
     }
 
-    public void setToUser(User toUser) {
-        this.toUser = toUser;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Message message = (Message) o;
+
+        if (id != message.id) return false;
+        if (content != null ? !content.equals(message.content) : message.content != null) return false;
+        if (fromUser != null ? !fromUser.equals(message.fromUser) : message.fromUser != null) return false;
+        if (toUser != null ? !toUser.equals(message.toUser) : message.toUser != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (fromUser != null ? fromUser.hashCode() : 0);
+        result = 31 * result + (toUser != null ? toUser.hashCode() : 0);
+        return result;
     }
 }

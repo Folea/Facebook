@@ -6,7 +6,8 @@ package my_exceptions;
 
 public class UserNotExistsException extends Exception {
 
-    public UserNotExistsException() {}
+    public UserNotExistsException() {
+    }
 
     public UserNotExistsException(Exception ex) {
         super(ex);

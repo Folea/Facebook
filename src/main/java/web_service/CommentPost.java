@@ -19,7 +19,7 @@ public class CommentPost {
 
     Controller controller;
 
-    public CommentPost(){
+    public CommentPost() {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         controller = injector.getInstance(Controller.class);

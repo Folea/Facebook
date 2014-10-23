@@ -20,6 +20,7 @@
           <element id="library" level="project" name="Maven: asm:asm:3.1" />
           <element id="library" level="project" name="Maven: com.sun.jersey:jersey-core:1.8" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.2.4" />
+          <element id="library" level="project" name="Maven: com.h2database:h2:1.4.182" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="facebook/web/Web" />

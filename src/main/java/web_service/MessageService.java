@@ -14,7 +14,6 @@ import my_exceptions.MessageNotExistsException;
 import my_exceptions.TokenNotExistsException;
 import my_exceptions.UserNotExistsException;
 
-import javax.naming.ldap.Control;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.LinkedList;
@@ -25,7 +24,7 @@ public class MessageService {
 
     Controller controller;
 
-    public MessageService(){
+    public MessageService() {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         controller = injector.getInstance(Controller.class);
