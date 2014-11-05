@@ -12,7 +12,7 @@ import injector.MyInitializer;
 import injector.MyInjector;
 import model.Post;
 import model.Publication;
-import my_exceptions.PublicationNotExistException;
+import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 
 import javax.ws.rs.*;
@@ -70,7 +70,7 @@ public class PostService {
             return gson.toJson(postDTO, PostDTO.class);
         } catch (TokenNotExistsException ex) {
             return gson.toJson("Token is incorrect " + token);
-        } catch (PublicationNotExistException ex) {
+        } catch (PublicationNotExistsException ex) {
             return gson.toJson("Publication id doesn't exist " + id);
         }
     }

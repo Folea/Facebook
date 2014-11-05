@@ -167,10 +167,10 @@ public class Controller {
      * @param token The token that identify the connected user.
      * @return The publication with the specified id.
      * @throws TokenNotExistsException      If the token doesn't exist in the DB.
-     * @throws PublicationNotExistException If the publication doesn't exist in the DB.
+     * @throws my_exceptions.PublicationNotExistsException If the publication doesn't exist in the DB.
      */
 
-    public Publication getPostByIdAndUser(int id, int token) throws TokenNotExistsException, PublicationNotExistException {
+    public Publication getPostByIdAndUser(int id, int token) throws TokenNotExistsException, PublicationNotExistsException {
         User user = tokens.getTokenById(token).getUser();
         return publications.getPublicationByIdAndUser(id, user.getId());
     }
@@ -194,10 +194,10 @@ public class Controller {
      * @param token The token that identify the connected user.
      * @return The id of the comment.
      * @throws TokenNotExistsException      If the token doesn't exist in the DB.
-     * @throws PublicationNotExistException If the publication doesn't exist in the DB.
+     * @throws my_exceptions.PublicationNotExistsException If the publication doesn't exist in the DB.
      */
 
-    public int commentPost(String json, int token) throws TokenNotExistsException, PublicationNotExistException {
+    public int commentPost(String json, int token) throws TokenNotExistsException, PublicationNotExistsException {
         Gson gson = new Gson();
         Comment comment = new Comment(tokens.getTokenById(token).getUser(), gson.fromJson(json,
                 PublicationDTO.class).getContent(), publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()));
@@ -223,17 +223,17 @@ public class Controller {
      * @param token The token that identify the connected user.
      * @return The id of the created like.
      * @throws TokenNotExistsException      If the token doesn't exist.
-     * @throws PublicationNotExistException If the publication doesn't exist.
-     * @throws LikeAlreadyExistException    If the like already exist.
+     * @throws my_exceptions.PublicationNotExistsException If the publication doesn't exist.
+     * @throws my_exceptions.LikeAlreadyExistsException    If the like already exist.
      */
 
-    public int likePublication(String json, int token) throws TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
+    public int likePublication(String json, int token) throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         Likes like = new Likes(publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()), tokens.getTokenById(token).getUser());
         try {
             likes.insert(like);
         } catch (RollbackException ex) {
-            throw new LikeAlreadyExistException(ex);
+            throw new LikeAlreadyExistsException(ex);
         }
         return like.getId();
     }

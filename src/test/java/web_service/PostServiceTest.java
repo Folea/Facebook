@@ -6,7 +6,7 @@ import dto.PostDTO;
 import dto.PublicationDTO;
 import dto.ReturnDTO;
 import model.*;
-import my_exceptions.PublicationNotExistException;
+import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 import org.junit.Before;
 import org.junit.Test;
@@ -118,7 +118,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void getPostByIdTestSuccess() throws PublicationNotExistException, TokenNotExistsException {
+    public void getPostByIdTestSuccess() throws PublicationNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
 
         User user = new User("Folea", "Folea", "1234");
@@ -156,7 +156,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void getPostByIdTestFail1() throws PublicationNotExistException, TokenNotExistsException {
+    public void getPostByIdTestFail1() throws PublicationNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
 
         User user = new User("Folea", "Folea", "1234");
@@ -176,7 +176,7 @@ public class PostServiceTest {
         List<Likes> likesComment = new LinkedList<>();
         likesComment.add(like2);
 
-        expect(controller.getPostByIdAndUser(2, 1)).andThrow(new PublicationNotExistException());
+        expect(controller.getPostByIdAndUser(2, 1)).andThrow(new PublicationNotExistsException());
         expect(controller.getComments(post)).andReturn(comments);
         expect(controller.getLikesForPublication(post)).andReturn(likesComment);
         expect(controller.getLikesForPublication(comment)).andReturn(likesComment);
@@ -194,7 +194,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void getPostByIdTestFail2() throws PublicationNotExistException, TokenNotExistsException {
+    public void getPostByIdTestFail2() throws PublicationNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
 
         User user = new User("Folea", "Folea", "1234");

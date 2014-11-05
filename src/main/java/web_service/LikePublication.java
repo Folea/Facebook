@@ -8,8 +8,8 @@ import controller.Controller;
 import dto.ReturnDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
-import my_exceptions.LikeAlreadyExistException;
-import my_exceptions.PublicationNotExistException;
+import my_exceptions.LikeAlreadyExistsException;
+import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 
 import javax.ws.rs.*;
@@ -26,6 +26,15 @@ public class LikePublication {
         controller = injector.getInstance(Controller.class);
     }
 
+    /**
+     * commentPost receive a json and the token of the logged user and call controller likePost which interprets the
+     * json. If controller.likePost can't create the like will return a exception that identify the error.
+     * @param json The json with like information.
+     * @param token The token of the connected user.
+     * @return Returns a Json. If the like was created the json will contain information about the like, otherwise
+     * will return information about the problem.
+     */
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -36,9 +45,9 @@ public class LikePublication {
             return gson.toJson(returnDTO, ReturnDTO.class);
         } catch (TokenNotExistsException ex) {
             return gson.toJson("You are not logged");
-        } catch (PublicationNotExistException ex) {
+        } catch (PublicationNotExistsException ex) {
             return gson.toJson("Publication not exist");
-        } catch (LikeAlreadyExistException ex) {
+        } catch (LikeAlreadyExistsException ex) {
             return gson.toJson("The like already exist");
         }
 

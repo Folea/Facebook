@@ -9,7 +9,6 @@ import injector.MyInjector;
 import my_exceptions.UserExistsException;
 import my_exceptions.UserNotExistsException;
 import my_exceptions.WrongPasswordException;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -17,14 +16,6 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.JVM)
 public class RegisterTest {
 
-    Controller controller;
-
-    @Before
-    public void setUp() {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        controller = injector.getInstance(Controller.class);
-    }
 
     /**
      * Test for a new user.
@@ -33,12 +24,14 @@ public class RegisterTest {
      */
 
     @Test
-    public void registerTest1() throws UserExistsException, UserNotExistsException, WrongPasswordException {
+    public void registerTestSuccess() throws UserExistsException, UserNotExistsException, WrongPasswordException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
+
         Gson gson = new Gson();
         UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
-        UserDTO userDTO1 = new UserDTO("Cristi", "Cristi", "1234");
         controller.register(gson.toJson(userDTO));
-        controller.register(gson.toJson(userDTO1));
         controller.login(gson.toJson(userDTO));
     }
 
@@ -49,10 +42,15 @@ public class RegisterTest {
      */
 
     @Test(expected = UserExistsException.class)
-    public void registerTest2() throws UserExistsException {
-        Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
+    public void registerTestFail1() throws UserExistsException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
 
+        Gson gson = new Gson();
+        UserDTO userDTO = new UserDTO("Cristi", "Cristi", "1234");
+
+        controller.register(gson.toJson(userDTO));
         controller.register(gson.toJson(userDTO));
     }
 

@@ -28,6 +28,12 @@ public class Login {
         controller = injector.getInstance(Controller.class);
     }
 
+    /**
+     *
+     * @param json
+     * @return
+     */
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

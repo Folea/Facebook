@@ -8,172 +8,145 @@ import dto.UserDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
 import model.Message;
-import my_exceptions.MessageNotExistsException;
-import my_exceptions.TokenNotExistsException;
-import my_exceptions.UserNotExistsException;
-import my_exceptions.WrongPasswordException;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
+import my_exceptions.*;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-@FixMethodOrder(MethodSorters.JVM)
 public class MessageTest {
 
-    Controller controller;
+    /**
+     * Test the sendMessage.
+     *
+     * @throws UserNotExistsException    If the user to send doesn't exist.
+     * @throws TokenNotExistsException   If the token of the logged user doesn't exist.
+     * @throws WrongPasswordException    If the password of the login user is wrong.
+     * @throws MessageNotExistsException If when try to retrieve the send message the message doesn't exist.
+     * @throws UserExistsException       If the user to register already exists.
+     */
 
-    @Before
-    public void setUp() {
+    @Test
+    public void sendMessageSuccess() throws UserNotExistsException, TokenNotExistsException, WrongPasswordException, MessageNotExistsException, UserExistsException {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        controller = injector.getInstance(Controller.class);
+        Controller controller = injector.getInstance(Controller.class);
+
+        Gson gson = new Gson();
+
+        UserDTO userDTO = new UserDTO("D", "D", "1234");
+        UserDTO userDTO1 = new UserDTO("E", "E", "1234");
+
+        controller.register(gson.toJson(userDTO, UserDTO.class));
+        controller.register(gson.toJson(userDTO1, UserDTO.class));
+
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setToUser("E");
+        messageDTO.setContent("Hello");
+
+        controller.sendMessage(gson.toJson(messageDTO), controller.login(gson.toJson(userDTO1, UserDTO.class)));
     }
 
+    /**
+     * Test if getMessages retrieve a valid list of messages. If are no messages retrieve a empty list.
+     *
+     * @throws UserNotExistsException  If the user to send doesn't exist.
+     * @throws TokenNotExistsException If the token of the logged user doesn't exist.
+     * @throws WrongPasswordException  If the password of the login user is wrong.
+     * @throws UserExistsException     If the user to register already exists.
+     */
 
     @Test
-    public void sendMessageSuccess() throws UserNotExistsException, TokenNotExistsException, WrongPasswordException, MessageNotExistsException {
-        Gson gson = new Gson();
+    public void getMessagesSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, UserExistsException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
 
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
+        Gson gson = new Gson();
+        UserDTO userDTO = new UserDTO("F", "F", "1234");
+        UserDTO userDTO1 = new UserDTO("G", "G", "1234");
+
+        controller.register(gson.toJson(userDTO, UserDTO.class));
+        controller.register(gson.toJson(userDTO1, UserDTO.class));
 
         MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setToUser("Cristi");
+        messageDTO.setToUser("G");
         messageDTO.setContent("Hello");
 
-        controller.sendMessage(gson.toJson(messageDTO), controller.login(gson.toJson(userDTO, UserDTO.class)));
+        int id = controller.sendMessage(gson.toJson(messageDTO), controller.login(gson.toJson(userDTO, UserDTO.class)));
+
+        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO1, UserDTO.class)));
+
+        assertEquals(id, messages.get(0).getId());
+        assertEquals(messageDTO.getContent(), messages.get(0).getContent());
+        assertEquals("F", messages.get(0).getFromUser().getUsername());
     }
 
-    @Test(expected = UserNotExistsException.class)
-    public void sendMessageFail1() throws UserNotExistsException, TokenNotExistsException, WrongPasswordException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
-        MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setToUser("B");
-        messageDTO.setContent("Hello");
-
-        controller.sendMessage(gson.toJson(messageDTO), controller.login(gson.toJson(userDTO, UserDTO.class)));
-    }
-
-    @Test(expected = WrongPasswordException.class)
-    public void sendMessageFail2() throws UserNotExistsException, TokenNotExistsException, WrongPasswordException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "12");
-        MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setToUser("B");
-        messageDTO.setContent("Hello");
-
-        controller.sendMessage(gson.toJson(messageDTO), controller.login(gson.toJson(userDTO, UserDTO.class)));
-    }
-
-    @Test(expected = TokenNotExistsException.class)
-    public void sendMessageFail3() throws UserNotExistsException, TokenNotExistsException {
-        Gson gson = new Gson();
-
-        MessageDTO messageDTO = new MessageDTO();
-        messageDTO.setToUser("Cristi");
-        messageDTO.setContent("Hello");
-
-        controller.sendMessage(gson.toJson(messageDTO), 999);
-    }
+    /**
+     * Test if the getMessageById it's retrieving the correct message from the database.
+     *
+     * @throws UserNotExistsException    If the user to send doesn't exist.
+     * @throws TokenNotExistsException   If the token of the logged user doesn't exist.
+     * @throws WrongPasswordException    If the password of the login user is wrong.
+     * @throws MessageNotExistsException If when try to retrieve the send message the message doesn't exist.
+     * @throws UserExistsException       If the user to register already exists.
+     */
 
     @Test
-    public void getMessagesSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException {
+    public void getMessageByIdSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException, UserExistsException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
+
         Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("Cristi", "Cristi", "1234");
+        UserDTO userDTO = new UserDTO("H", "H", "1234");
+        UserDTO userDTO1 = new UserDTO("I", "I", "1234");
 
-        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO, UserDTO.class)));
+        controller.register(gson.toJson(userDTO, UserDTO.class));
+        controller.register(gson.toJson(userDTO1, UserDTO.class));
 
-        assertEquals("Cristi", messages.get(0).getToUser().getUsername());
-        assertEquals("Hello", messages.get(0).getContent());
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setToUser("I");
+        messageDTO.setContent("Hello");
+
+        int id = controller.sendMessage(gson.toJson(messageDTO), controller.login(gson.toJson(userDTO, UserDTO.class)));
+
+        Message message = controller.getMessageById(id, controller.login(gson.toJson(userDTO1, UserDTO.class)));
+
+        assertEquals(id, message.getId());
     }
 
-    @Test(expected = UserNotExistsException.class)
-    public void getMessagesFail1() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException {
-        Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("C", "C", "1234");
-
-        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO, UserDTO.class)));
-    }
-
-    @Test(expected = WrongPasswordException.class)
-    public void getMessagesFail2() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException {
-        Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("Cristi", "Cristi", "12");
-
-        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        assertEquals("Cristi", messages.get(0).getToUser().getUsername());
-        assertEquals("Hello", messages.get(0).getContent());
-    }
-
-    @Test(expected = TokenNotExistsException.class)
-    public void getMessagesFail3() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException {
-        List<Message> messages = controller.getMessages(999);
-
-        assertEquals("Cristi", messages.get(0).getToUser().getUsername());
-        assertEquals("Hello", messages.get(0).getContent());
-    }
-
-    @Test
-    public void getMessageByIdSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException {
-        Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("Cristi", "Cristi", "1234");
-
-        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        Message message = controller.getMessageById(messages.get(0).getId(), controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        assertEquals(messages.get(0), message);
-    }
-
-    @Test(expected = UserNotExistsException.class)
-    public void getMessageByIdFail1() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException {
-        Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("AA", "AA", "1234");
-
-        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO, UserDTO.class)));
-    }
-
-    @Test(expected = WrongPasswordException.class)
-    public void getMessageByIdFail2() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException {
-        Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("Cristi", "Cristi", "12");
-
-        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        Message message = controller.getMessageById(messages.get(0).getId(), controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        assertEquals(messages.get(0), message);
-    }
-
-    @Test(expected = TokenNotExistsException.class)
-    public void getMessageByIdFail3() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException {
-        Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("Cristi", "Cristi", "1234");
-
-        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        Message message = controller.getMessageById(messages.get(0).getId(), 99);
-
-        assertEquals(messages.get(0), message);
-    }
+    /**
+     * Test if when try to retrieve a message that doesn't exist will receive a MessageNotExistsException
+     *
+     * @throws UserNotExistsException    If the user to send doesn't exist.
+     * @throws TokenNotExistsException   If the token of the logged user doesn't exist.
+     * @throws WrongPasswordException    If the password of the login user is wrong.
+     * @throws MessageNotExistsException If when try to retrieve the send message the message doesn't exist.
+     * @throws UserExistsException       If the user to register already exists.
+     */
 
     @Test(expected = MessageNotExistsException.class)
-    public void getMessageByIdFail4() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException {
+    public void getMessageByIdFail4() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException, UserExistsException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
+
         Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("Cristi", "Cristi", "1234");
+        UserDTO userDTO = new UserDTO("J", "J", "1234");
+        UserDTO userDTO1 = new UserDTO("K", "K", "1234");
 
-        List<Message> messages = controller.getMessages(controller.login(gson.toJson(userDTO, UserDTO.class)));
+        controller.register(gson.toJson(userDTO, UserDTO.class));
+        controller.register(gson.toJson(userDTO1, UserDTO.class));
 
-        Message message = controller.getMessageById(99, controller.login(gson.toJson(userDTO, UserDTO.class)));
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setToUser("K");
+        messageDTO.setContent("Hello");
 
-        assertEquals(messages.get(0), message);
+        int id = controller.sendMessage(gson.toJson(messageDTO), controller.login(gson.toJson(userDTO, UserDTO.class)));
+
+        Message message = controller.getMessageById(99, controller.login(gson.toJson(userDTO1, UserDTO.class)));
     }
 
 }

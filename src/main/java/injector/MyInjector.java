@@ -14,4 +14,5 @@ public class MyInjector extends AbstractModule {
         bind(LikesDAO.class).to(LikesDAOImpl.class);
         bind(TokenDAO.class).to(TokenDAOImpl.class);
     }
+
 }

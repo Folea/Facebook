@@ -6,7 +6,7 @@ import com.google.inject.persist.Transactional;
 import dao.PublicationDAO;
 import model.Publication;
 import model.User;
-import my_exceptions.PublicationNotExistException;
+import my_exceptions.PublicationNotExistsException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -49,25 +49,25 @@ public class PublicationDAOImpl implements PublicationDAO {
 
     @Override
     @Transactional
-    public Publication getPublicationByIdAndUser(int id, int user) throws PublicationNotExistException {
+    public Publication getPublicationByIdAndUser(int id, int user) throws PublicationNotExistsException {
         try {
             TypedQuery<Publication> q = em.createNamedQuery("Publication.getPublicationByIdAndUser", Publication.class);
             q.setParameter("publication", id);
             q.setParameter("user", user);
             return q.getSingleResult();
         } catch (NoResultException ex) {
-            throw new PublicationNotExistException(ex);
+            throw new PublicationNotExistsException(ex);
         }
     }
 
     @Override
-    public Publication getPublicationById(int id) throws PublicationNotExistException {
+    public Publication getPublicationById(int id) throws PublicationNotExistsException {
         try {
             TypedQuery<Publication> q = em.createNamedQuery("Publication.getPublicationById", Publication.class);
             q.setParameter("publication", id);
             return q.getSingleResult();
         } catch (NoResultException ex) {
-            throw new PublicationNotExistException(ex);
+            throw new PublicationNotExistsException(ex);
         }
     }
 

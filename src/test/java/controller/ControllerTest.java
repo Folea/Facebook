@@ -279,7 +279,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void getPostByIdAndUserSuccess() throws TokenNotExistsException, PublicationNotExistException {
+    public void getPostByIdAndUserSuccess() throws TokenNotExistsException, PublicationNotExistsException {
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
         Token token = new Token(user);
@@ -297,7 +297,7 @@ public class ControllerTest {
     }
 
     @Test(expected = TokenNotExistsException.class)
-    public void getPostByIdAndUserFail1() throws TokenNotExistsException, PublicationNotExistException {
+    public void getPostByIdAndUserFail1() throws TokenNotExistsException, PublicationNotExistsException {
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
         Token token = new Token(user);
@@ -314,8 +314,8 @@ public class ControllerTest {
         assertEquals(10, controller.getPostByIdAndUser(10, 5).getId());
     }
 
-    @Test(expected = PublicationNotExistException.class)
-    public void getPostByIdAndUserFail2() throws TokenNotExistsException, PublicationNotExistException {
+    @Test(expected = PublicationNotExistsException.class)
+    public void getPostByIdAndUserFail2() throws TokenNotExistsException, PublicationNotExistsException {
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
         Token token = new Token(user);
@@ -324,7 +324,7 @@ public class ControllerTest {
 
         Post post = new Post("content", user);
         post.setId(10);
-        expect(publications.getPublicationByIdAndUser(10, user.getId())).andThrow(new PublicationNotExistException());
+        expect(publications.getPublicationByIdAndUser(10, user.getId())).andThrow(new PublicationNotExistsException());
 
         replay(tokens);
         replay(publications);
@@ -373,7 +373,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void commentPostSuccess() throws TokenNotExistsException, PublicationNotExistException {
+    public void commentPostSuccess() throws TokenNotExistsException, PublicationNotExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -397,7 +397,7 @@ public class ControllerTest {
     }
 
     @Test(expected = TokenNotExistsException.class)
-    public void commentPostFail1() throws TokenNotExistsException, PublicationNotExistException {
+    public void commentPostFail1() throws TokenNotExistsException, PublicationNotExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -420,8 +420,8 @@ public class ControllerTest {
         controller.commentPost(gson.toJson(publicationDTO), token.getGUID());
     }
 
-    @Test(expected = PublicationNotExistException.class)
-    public void commentPostFail2() throws TokenNotExistsException, PublicationNotExistException {
+    @Test(expected = PublicationNotExistsException.class)
+    public void commentPostFail2() throws TokenNotExistsException, PublicationNotExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -436,7 +436,7 @@ public class ControllerTest {
         Post post = new Post();
         post.setId(10);
 
-        expect(publications.getPublicationById(10)).andThrow(new PublicationNotExistException());
+        expect(publications.getPublicationById(10)).andThrow(new PublicationNotExistsException());
 
         replay(tokens);
         replay(publications);
@@ -462,7 +462,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void likePublicationSuccess() throws TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
+    public void likePublicationSuccess() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -485,7 +485,7 @@ public class ControllerTest {
     }
 
     @Test(expected = TokenNotExistsException.class)
-    public void likePublicationFail1() throws TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
+    public void likePublicationFail1() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -507,8 +507,8 @@ public class ControllerTest {
         controller.likePublication(gson.toJson(publicationDTO), token.getGUID());
     }
 
-    @Test(expected = PublicationNotExistException.class)
-    public void likePublicationFail2() throws TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
+    @Test(expected = PublicationNotExistsException.class)
+    public void likePublicationFail2() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -522,7 +522,7 @@ public class ControllerTest {
         Post post = new Post();
         post.setId(10);
 
-        expect(publications.getPublicationById(10)).andThrow(new PublicationNotExistException());
+        expect(publications.getPublicationById(10)).andThrow(new PublicationNotExistsException());
 
         replay(tokens);
         replay(publications);
@@ -530,8 +530,8 @@ public class ControllerTest {
         controller.likePublication(gson.toJson(publicationDTO), token.getGUID());
     }
 
-    @Test(expected = LikeAlreadyExistException.class)
-    public void likePublicationFail3() throws TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
+    @Test(expected = LikeAlreadyExistsException.class)
+    public void likePublicationFail3() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);

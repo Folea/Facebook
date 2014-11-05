@@ -5,12 +5,12 @@ package my_exceptions;
  * already exist.
  */
 
-public class LikeAlreadyExistException extends Exception {
+public class LikeAlreadyExistsException extends Exception {
 
-    public LikeAlreadyExistException() {
+    public LikeAlreadyExistsException() {
     }
 
-    public LikeAlreadyExistException(Exception ex) {
+    public LikeAlreadyExistsException(Exception ex) {
         super(ex);
     }
 

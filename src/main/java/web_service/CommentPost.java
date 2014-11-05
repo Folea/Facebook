@@ -8,7 +8,7 @@ import controller.Controller;
 import dto.ReturnDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
-import my_exceptions.PublicationNotExistException;
+import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 
 import javax.ws.rs.*;
@@ -25,6 +25,14 @@ public class CommentPost {
         controller = injector.getInstance(Controller.class);
     }
 
+    /**
+     * commentPost receive a json and the token of the logged user and call controller commentPost which interprets the
+     * json. If controller.commentPost can't create the comment will return a exception that identify the error.
+     * @param json The json whit comments data.
+     * @param token The token of the connected user.
+     * @return Returns a Json. If the comment was created the json will contain information about the comment, otherwise
+     * will return information about the problem.
+     */
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -36,7 +44,7 @@ public class CommentPost {
             return gson.toJson(returnDTO, ReturnDTO.class);
         } catch (TokenNotExistsException ex) {
             return gson.toJson("Comment fail");
-        } catch (PublicationNotExistException ex) {
+        } catch (PublicationNotExistsException ex) {
             return gson.toJson("Publication not exist");
         }
     }

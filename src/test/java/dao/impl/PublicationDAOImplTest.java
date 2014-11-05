@@ -5,7 +5,7 @@ import model.Comment;
 import model.Post;
 import model.Publication;
 import model.User;
-import my_exceptions.PublicationNotExistException;
+import my_exceptions.PublicationNotExistsException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ public class PublicationDAOImplTest {
     }
 
     @Test
-    public void getPublicationByIdAndUserSuccess() throws PublicationNotExistException {
+    public void getPublicationByIdAndUserSuccess() throws PublicationNotExistsException {
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
         Post post = new Post("Hello", user);
@@ -51,8 +51,8 @@ public class PublicationDAOImplTest {
         assertEquals(2, publicationDAO.getPublicationByIdAndUser(2, 1).getId());
     }
 
-    @Test(expected = PublicationNotExistException.class)
-    public void getPublicationByIdAndUserFail() throws PublicationNotExistException {
+    @Test(expected = PublicationNotExistsException.class)
+    public void getPublicationByIdAndUserFail() throws PublicationNotExistsException {
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
         Post post = new Post("Hello", user);
@@ -67,7 +67,7 @@ public class PublicationDAOImplTest {
     }
 
     @Test
-    public void getPublicationByIdSuccess() throws PublicationNotExistException {
+    public void getPublicationByIdSuccess() throws PublicationNotExistsException {
         Post post = new Post();
         post.setId(2);
 
@@ -79,8 +79,8 @@ public class PublicationDAOImplTest {
         assertEquals(2, publicationDAO.getPublicationById(2).getId());
     }
 
-    @Test(expected = PublicationNotExistException.class)
-    public void getPublicationByIdFail() throws PublicationNotExistException {
+    @Test(expected = PublicationNotExistsException.class)
+    public void getPublicationByIdFail() throws PublicationNotExistsException {
         Post post = new Post();
         post.setId(2);
 

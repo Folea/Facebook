@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import controller.Controller;
 import dto.PublicationDTO;
 import dto.ReturnDTO;
-import my_exceptions.PublicationNotExistException;
+import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class CommentPostTest {
     }
 
     @Test
-    public void commentPostTestSuccess() throws PublicationNotExistException, TokenNotExistsException {
+    public void commentPostTestSuccess() throws PublicationNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setContent("Hello");
@@ -39,12 +39,12 @@ public class CommentPostTest {
     }
 
     @Test
-    public void commentPostTestFail1() throws PublicationNotExistException, TokenNotExistsException {
+    public void commentPostTestFail1() throws PublicationNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setContent("Hello");
         publicationDTO.setPost(5);
-        expect(controller.commentPost(gson.toJson(publicationDTO), 1)).andThrow(new PublicationNotExistException());
+        expect(controller.commentPost(gson.toJson(publicationDTO), 1)).andThrow(new PublicationNotExistsException());
         replay(controller);
 
         commentPost.setController(controller);
@@ -52,7 +52,7 @@ public class CommentPostTest {
     }
 
     @Test
-    public void commentPostTestFail2() throws PublicationNotExistException, TokenNotExistsException {
+    public void commentPostTestFail2() throws PublicationNotExistsException, TokenNotExistsException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setContent("Hello");

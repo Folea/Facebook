@@ -11,7 +11,7 @@ import my_exceptions.*;
 
 public class Main {
 
-    public static void main(String[] args0) throws TokenNotExistsException, MessageNotExistsException, UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistException {
+    public static void main(String[] args0) throws TokenNotExistsException, MessageNotExistsException, UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistsException {
 
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);

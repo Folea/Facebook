@@ -6,64 +6,74 @@ import controller.Controller;
 import dto.UserDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
+import my_exceptions.UserExistsException;
 import my_exceptions.UserNotExistsException;
 import my_exceptions.WrongPasswordException;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
-@FixMethodOrder(MethodSorters.JVM)
 public class LoginTest {
 
-    Controller controller;
-
-    @Before
-    public void setUp() {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
-        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        controller = injector.getInstance(Controller.class);
-    }
-
     /**
-     * Login successful.
+     * Test the login with an user that exists in the DB.
+     *
+     * @throws UserNotExistsException If the user doesn't exist.
+     * @throws WrongPasswordException If the password is wrong.
+     * @throws UserExistsException    If the User exist when try to register it.
      */
 
     @Test
-    public void loginSuccess() throws UserNotExistsException, WrongPasswordException {
-        Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
+    public void loginSuccess() throws UserNotExistsException, WrongPasswordException, UserExistsException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
 
+        Gson gson = new Gson();
+        UserDTO userDTO = new UserDTO("A", "A", "1234");
+
+        controller.register(gson.toJson(userDTO, UserDTO.class));
         controller.login(gson.toJson(userDTO));
     }
 
     /**
-     * The user doesn't exist
+     * Test the login with an user that not exist and waiting for UserNotExistsException.
+     *
+     * @throws UserNotExistsException If the user doesn't exist.
+     * @throws WrongPasswordException If the password is wrong.
+     * @throws UserExistsException    If the User exist when try to register it.
      */
 
     @Test(expected = UserNotExistsException.class)
-    public void loginFai11() throws UserNotExistsException, WrongPasswordException {
+    public void loginFai11() throws UserNotExistsException, WrongPasswordException, UserExistsException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
+
         Gson gson = new Gson();
-        UserDTO userDTO = new UserDTO("C", "C", "1234");
+        UserDTO userDTO = new UserDTO("B", "B", "1234");
 
         controller.login(gson.toJson(userDTO));
     }
 
     /**
-     * The password it's wrong.
+     * Test the login with a wrong password.
+     *
+     * @throws UserNotExistsException If the user doesn't exist.
+     * @throws WrongPasswordException If the password is wrong.
+     * @throws UserExistsException    If the User exist when try to register it.
      */
 
     @Test(expected = WrongPasswordException.class)
-    public void loginFail2() throws UserNotExistsException, WrongPasswordException {
+    public void loginFail2() throws UserNotExistsException, WrongPasswordException, UserExistsException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
+
         Gson gson = new Gson();
 
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "12");
+        UserDTO userDTO1 = new UserDTO("AA", "AA", "1234");
+        UserDTO userDTO = new UserDTO("AA", "AA", "12");
 
+        controller.register(gson.toJson(userDTO1, UserDTO.class));
         controller.login(gson.toJson(userDTO));
     }
-
-    /**
-     * The token it's inserted correctly
-     */
-
 }

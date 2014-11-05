@@ -3,162 +3,91 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
+import dto.PostDTO;
 import dto.PublicationDTO;
 import dto.UserDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
-import model.Likes;
 import model.Publication;
 import my_exceptions.*;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
-
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
-@FixMethodOrder(MethodSorters.JVM)
 public class LikeTest {
-    Controller controller;
 
-    @Before
-    public void setUp() {
+    /**
+     * Tests if a like is persisted successful on the DB by insert the like and then retrieve it from the DB and compare
+     * to the like that was inserted.
+     *
+     * @throws UserNotExistsException       If the user doesn't exist.
+     * @throws WrongPasswordException       If the password of the user to login is wrong.
+     * @throws TokenNotExistsException      If the token of the user to post the like is wrong.
+     * @throws my_exceptions.PublicationNotExistsException If the publication to like doesn't exists.
+     * @throws my_exceptions.LikeAlreadyExistsException    If the like already exists.
+     * @throws UserExistsException          If the user to register already exists.
+     */
+
+    @Test
+    public void likePublicationSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, UserExistsException {
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
-        controller = injector.getInstance(Controller.class);
-    }
+        Controller controller = injector.getInstance(Controller.class);
 
-    @Test
-    public void likePublicationSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
         Gson gson = new Gson();
 
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
+        PostDTO postDTO = new PostDTO();
+        postDTO.setContent("Hello");
+        UserDTO userDTO = new UserDTO("Q", "Q", "1234");
 
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
+        controller.register(gson.toJson(userDTO, UserDTO.class));
+
+        int idPost = controller.createPost(gson.toJson(postDTO), controller.login(gson.toJson(userDTO)));
+
+        Publication post = controller.getPostByIdAndUser(idPost, controller.login(gson.toJson(userDTO, UserDTO.class)));
 
         PublicationDTO like = new PublicationDTO();
-        like.setPost(posts.get(0).getId());
+        like.setPost(idPost);
+
+        int idLike = controller.likePublication(gson.toJson(like, PublicationDTO.class), controller.login(gson.toJson(userDTO, UserDTO.class)));
+
+        assertEquals(post, controller.getLikesForPublication(post).get(0).getPublication());
+        assertEquals(idLike, controller.getLikesForPublication(post).get(0).getId());
+    }
+
+    /**
+     * Test if when try to insert a like that already exists will received a LikeAlreadyExistsException.
+     *
+     * @throws UserNotExistsException       If the user doesn't exist.
+     * @throws WrongPasswordException       If the password of the user to login is wrong.
+     * @throws TokenNotExistsException      If the token of the user to post the like is wrong.
+     * @throws my_exceptions.PublicationNotExistsException If the publication to like doesn't exists.
+     * @throws my_exceptions.LikeAlreadyExistsException    If the like already exists.
+     * @throws UserExistsException          If the user to register already exists.
+     */
+
+    @Test(expected = LikeAlreadyExistsException.class)
+    public void likePublicationFail5() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, UserExistsException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
+        Controller controller = injector.getInstance(Controller.class);
+
+        Gson gson = new Gson();
+
+        PostDTO postDTO = new PostDTO();
+        postDTO.setContent("Hello");
+        UserDTO userDTO = new UserDTO("R", "R", "1234");
+
+        controller.register(gson.toJson(userDTO, UserDTO.class));
+
+        int idPost = controller.createPost(gson.toJson(postDTO), controller.login(gson.toJson(userDTO)));
+
+        Publication post = controller.getPostByIdAndUser(idPost, controller.login(gson.toJson(userDTO, UserDTO.class)));
+
+        PublicationDTO like = new PublicationDTO();
+        like.setPost(idPost);
 
         controller.likePublication(gson.toJson(like, PublicationDTO.class), controller.login(gson.toJson(userDTO, UserDTO.class)));
-        assertNotEquals(0, controller.getLikesForPublication(posts.get(0)));
-    }
-
-    @Test(expected = UserNotExistsException.class)
-    public void likePublicationFail1() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("F", "F", "1234");
-
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
-    }
-
-    @Test(expected = WrongPasswordException.class)
-    public void likePublicationFail2() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "12");
-
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
-    }
-
-    @Test(expected = TokenNotExistsException.class)
-    public void likePublicationFail3() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
-
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        PublicationDTO like = new PublicationDTO();
-        like.setPost(posts.get(0).getId());
-
-        controller.likePublication(gson.toJson(like, PublicationDTO.class), 999);
-        assertNotEquals(0, controller.getLikesForPublication(posts.get(0)));
-    }
-
-    @Test(expected = PublicationNotExistException.class)
-    public void likePublicationFail4() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
-
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        PublicationDTO like = new PublicationDTO();
-        like.setPost(999);
-
         controller.likePublication(gson.toJson(like, PublicationDTO.class), controller.login(gson.toJson(userDTO, UserDTO.class)));
-        assertNotEquals(0, controller.getLikesForPublication(posts.get(0)));
     }
-
-    @Test(expected = LikeAlreadyExistException.class)
-    public void likePublicationFail5() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistException, LikeAlreadyExistException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
-
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        PublicationDTO like = new PublicationDTO();
-        like.setPost(posts.get(0).getId());
-
-        controller.likePublication(gson.toJson(like, PublicationDTO.class), controller.login(gson.toJson(userDTO, UserDTO.class)));
-        assertNotEquals(0, controller.getLikesForPublication(posts.get(0)));
-    }
-
-    @Test
-    public void getLikesForPublicationSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
-
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        List<Likes> likes = controller.getLikesForPublication(posts.get(0));
-
-        assertEquals(posts.get(0), likes.get(0).getPublication());
-    }
-
-    @Test(expected = UserNotExistsException.class)
-    public void getLikesForPublicationFail1() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("F", "Folea", "1234");
-
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        List<Likes> likes = controller.getLikesForPublication(posts.get(0));
-
-        assertEquals(posts.get(0), likes.get(0).getPublication());
-    }
-
-    @Test(expected = WrongPasswordException.class)
-    public void getLikesForPublicationFail2() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1");
-
-        List<Publication> posts = controller.getPosts(controller.login(gson.toJson(userDTO, UserDTO.class)));
-
-        List<Likes> likes = controller.getLikesForPublication(posts.get(0));
-
-        assertEquals(posts.get(0), likes.get(0).getPublication());
-    }
-
-    @Test(expected = TokenNotExistsException.class)
-    public void getLikesForPublicationFail3() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException {
-        Gson gson = new Gson();
-
-        UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
-
-        List<Publication> posts = controller.getPosts(999);
-
-        List<Likes> likes = controller.getLikesForPublication(posts.get(0));
-
-        assertEquals(posts.get(0), likes.get(0).getPublication());
-    }
-
 }
