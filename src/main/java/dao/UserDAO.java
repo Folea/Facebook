@@ -7,7 +7,7 @@ public interface UserDAO {
 
     public void insert(User user);
 
-    public User getUserByUsername(String name) throws UserNotExistsException;
+    public User getUserByUsername(String username) throws UserNotExistsException;
 
     public User getUserById(int id) throws UserNotExistsException;
 

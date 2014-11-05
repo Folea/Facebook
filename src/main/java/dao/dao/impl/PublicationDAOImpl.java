@@ -44,7 +44,7 @@ public class PublicationDAOImpl implements PublicationDAO {
      * GetPublicationById it's used to get a publication with the indicate id.
      *
      * @param id The id of the publication.
-     * @return Publication
+     * @return Publication The publication with the specified id.
      */
 
     @Override
@@ -59,6 +59,13 @@ public class PublicationDAOImpl implements PublicationDAO {
             throw new PublicationNotExistsException(ex);
         }
     }
+
+    /**
+     * getPublicationById method it's used to get a publication which id is equals to the parameter id.
+     * @param id The id of the publication.
+     * @return Return the publication if it exists
+     * @throws PublicationNotExistsException If the publication doesn't exist, will throw this exception.
+     */
 
     @Override
     public Publication getPublicationById(int id) throws PublicationNotExistsException {
@@ -89,8 +96,8 @@ public class PublicationDAOImpl implements PublicationDAO {
     /**
      * GetCommentByPost it's used to get a comment from a post.
      *
-     * @param publication
-     * @return
+     * @param publication the publication for which to get the comments.
+     * @return List of publications.
      */
 
     @Override

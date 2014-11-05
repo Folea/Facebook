@@ -12,6 +12,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+/**
+ * Token implements the TokenDAO and provides the implementation for the method which allows you to interact with the DB.
+ */
+
 @Singleton
 public class TokenDAOImpl implements TokenDAO {
 
@@ -22,6 +26,11 @@ public class TokenDAOImpl implements TokenDAO {
         this.em = em;
     }
 
+    /**
+     * Insert a token into the DB.
+     * @param token The token to insert.
+     */
+
     @Override
     @Transactional
     public void insert(Token token) {
@@ -30,6 +39,13 @@ public class TokenDAOImpl implements TokenDAO {
         query.executeUpdate();
         em.persist(token);
     }
+
+    /**
+     * getTokenById method is used to get a specific token from the DB.
+     * @param id The id of the token to get.
+     * @return The token if it exist.
+     * @throws TokenNotExistsException If the token doesn't exist will throw the exception.
+     */
 
     @Override
     @Transactional
