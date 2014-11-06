@@ -7,6 +7,7 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import controller.Controller;
 import injector.MyInitializer;
 import injector.MyInjector;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.UserExistsException;
 
 import javax.ws.rs.Consumes;
@@ -36,6 +37,8 @@ public class Register {
             return gson.toJson("The user has been registered");
         } catch (UserExistsException ex) {
             return gson.toJson("Register fails");
+        } catch (NullJsonContentException e) {
+            return gson.toJson("The json doesn't contains the expected information");
         }
     }
 

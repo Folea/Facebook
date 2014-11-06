@@ -6,6 +6,7 @@ import controller.Controller;
 import dto.UserDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.UserExistsException;
 import my_exceptions.UserNotExistsException;
 import my_exceptions.WrongPasswordException;
@@ -24,8 +25,8 @@ public class RegisterTest {
      */
 
     @Test
-    public void registerTestSuccess() throws UserExistsException, UserNotExistsException, WrongPasswordException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void registerTestSuccess() throws UserExistsException, UserNotExistsException, WrongPasswordException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -42,8 +43,8 @@ public class RegisterTest {
      */
 
     @Test(expected = UserExistsException.class)
-    public void registerTestFail1() throws UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void registerTestFail1() throws UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 

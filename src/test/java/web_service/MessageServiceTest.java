@@ -7,6 +7,7 @@ import dto.ReturnDTO;
 import model.Message;
 import model.User;
 import my_exceptions.MessageNotExistsException;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.TokenNotExistsException;
 import my_exceptions.UserNotExistsException;
 import org.junit.Before;
@@ -76,7 +77,7 @@ public class MessageServiceTest {
     }
 
     @Test
-    public void sendMessageSuccess() throws UserNotExistsException, TokenNotExistsException {
+    public void sendMessageSuccess() throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
 
         MessageDTO messageDTO = new MessageDTO();
@@ -93,7 +94,7 @@ public class MessageServiceTest {
     }
 
     @Test
-    public void sendMessageFail1() throws UserNotExistsException, TokenNotExistsException {
+    public void sendMessageFail1() throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
 
         MessageDTO messageDTO = new MessageDTO();
@@ -109,7 +110,7 @@ public class MessageServiceTest {
     }
 
     @Test
-    public void sendMessageFail2() throws UserNotExistsException, TokenNotExistsException {
+    public void sendMessageFail2() throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
 
         MessageDTO messageDTO = new MessageDTO();
@@ -122,6 +123,22 @@ public class MessageServiceTest {
 
         messageService.setController(controller);
         assertEquals(gson.toJson("Must be logged"), messageService.sendMessage(gson.toJson(messageDTO), 1));
+    }
+
+    @Test
+    public void sendMessageFail3() throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setContent("Hello");
+        messageDTO.setToUser("Folea");
+        messageDTO.setFromUser("Folea");
+        expect(controller.sendMessage(gson.toJson(messageDTO), 1)).andThrow(new NullJsonContentException());
+
+        replay(controller);
+
+        messageService.setController(controller);
+        assertEquals(gson.toJson("The json doesn't contains the expected information"), messageService.sendMessage(gson.toJson(messageDTO), 1));
     }
 
     @Test

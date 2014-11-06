@@ -7,10 +7,7 @@ import dto.UserDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
 import model.User;
-import my_exceptions.TokenNotExistsException;
-import my_exceptions.UserExistsException;
-import my_exceptions.UserNotExistsException;
-import my_exceptions.WrongPasswordException;
+import my_exceptions.*;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -30,8 +27,8 @@ public class TokenTest {
      */
 
     @Test
-    public void getUserByTokenSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void getUserByTokenSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -58,7 +55,7 @@ public class TokenTest {
 
     @Test(expected = TokenNotExistsException.class)
     public void getUserByTokenFail3() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
         Gson gson = new Gson();

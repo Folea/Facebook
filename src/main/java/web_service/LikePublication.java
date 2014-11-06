@@ -9,6 +9,7 @@ import dto.ReturnDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
 import my_exceptions.LikeAlreadyExistsException;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 
@@ -49,6 +50,8 @@ public class LikePublication {
             return gson.toJson("Publication not exist");
         } catch (LikeAlreadyExistsException ex) {
             return gson.toJson("The like already exist");
+        } catch (NullJsonContentException e) {
+            return gson.toJson("The json doesn't contain the expected information");
         }
 
     }

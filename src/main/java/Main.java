@@ -11,7 +11,7 @@ import my_exceptions.*;
 
 public class Main {
 
-    public static void main(String[] args0) throws TokenNotExistsException, MessageNotExistsException, UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistsException {
+    public static void main(String[] args0) throws TokenNotExistsException, MessageNotExistsException, UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistsException, NullJsonContentException {
 
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
@@ -22,6 +22,7 @@ public class Main {
         userDTO.setPassword("1234");
         userDTO.setUsername("Folea");
         userDTO.setName("Folea");
+
 
         controller.register(gson.toJson(userDTO, UserDTO.class));
         controller.login(gson.toJson(userDTO, UserDTO.class));

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import controller.Controller;
 import dto.PublicationDTO;
 import dto.ReturnDTO;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 import org.junit.Before;
@@ -21,11 +22,10 @@ public class CommentPostTest {
     public void setUp() {
         controller = createNiceMock(Controller.class);
         commentPost = new CommentPost();
-
     }
 
     @Test
-    public void commentPostTestSuccess() throws PublicationNotExistsException, TokenNotExistsException {
+    public void commentPostTestSuccess() throws PublicationNotExistsException, TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setContent("Hello");
@@ -39,7 +39,7 @@ public class CommentPostTest {
     }
 
     @Test
-    public void commentPostTestFail1() throws PublicationNotExistsException, TokenNotExistsException {
+    public void commentPostTestFail1() throws PublicationNotExistsException, TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setContent("Hello");
@@ -52,7 +52,7 @@ public class CommentPostTest {
     }
 
     @Test
-    public void commentPostTestFail2() throws PublicationNotExistsException, TokenNotExistsException {
+    public void commentPostTestFail2() throws PublicationNotExistsException, TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setContent("Hello");
@@ -63,4 +63,18 @@ public class CommentPostTest {
         commentPost.setController(controller);
         assertEquals(gson.toJson("Comment fail"), commentPost.commentPost(gson.toJson(publicationDTO), 1));
     }
+
+    @Test
+    public void commentPostTestFail3() throws PublicationNotExistsException, TokenNotExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+        PublicationDTO publicationDTO = new PublicationDTO();
+        publicationDTO.setContent("Hello");
+        publicationDTO.setPost(5);
+        expect(controller.commentPost(gson.toJson(publicationDTO), 1)).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        commentPost.setController(controller);
+        assertEquals(gson.toJson("The json doesn't contain the expected information"), commentPost.commentPost(gson.toJson(publicationDTO), 1));
+    }
+
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import controller.Controller;
 import dto.ReturnDTO;
 import dto.UserDTO;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.UserNotExistsException;
 import my_exceptions.WrongPasswordException;
 import org.junit.Before;
@@ -24,7 +25,7 @@ public class LoginTest {
     }
 
     @Test
-    public void loginSuccess() throws UserNotExistsException, WrongPasswordException {
+    public void loginSuccess() throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
         Gson gson = new Gson();
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername("Folea");
@@ -41,7 +42,7 @@ public class LoginTest {
     }
 
     @Test
-    public void loginFail1() throws UserNotExistsException, WrongPasswordException {
+    public void loginFail1() throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
         Gson gson = new Gson();
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername("Folea");
@@ -57,7 +58,7 @@ public class LoginTest {
     }
 
     @Test
-    public void loginFail2() throws UserNotExistsException, WrongPasswordException {
+    public void loginFail2() throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
         Gson gson = new Gson();
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername("Folea");
@@ -70,5 +71,21 @@ public class LoginTest {
         login.setController(controller);
 
         assertEquals(gson.toJson("The password is wrong"), login.login(gson.toJson(userDTO)));
+    }
+
+    @Test
+    public void loginFail3() throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
+        Gson gson = new Gson();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("Folea");
+        userDTO.setPassword("1234");
+
+        expect(controller.login(gson.toJson(userDTO))).andThrow(new NullJsonContentException());
+
+        replay(controller);
+
+        login.setController(controller);
+
+        assertEquals(gson.toJson("The json doesn't contains the expected information"), login.login(gson.toJson(userDTO)));
     }
 }

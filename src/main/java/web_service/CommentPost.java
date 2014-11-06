@@ -8,6 +8,7 @@ import controller.Controller;
 import dto.ReturnDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 
@@ -46,6 +47,8 @@ public class CommentPost {
             return gson.toJson("Comment fail");
         } catch (PublicationNotExistsException ex) {
             return gson.toJson("Publication not exist");
+        } catch (NullJsonContentException e) {
+            return gson.toJson("The json doesn't contain the expected information");
         }
     }
 

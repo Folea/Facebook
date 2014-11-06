@@ -12,6 +12,7 @@ import injector.MyInitializer;
 import injector.MyInjector;
 import model.Post;
 import model.Publication;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 
@@ -85,6 +86,8 @@ public class PostService {
             return gson.toJson(returnDTO, ReturnDTO.class);
         } catch (TokenNotExistsException ex) {
             return gson.toJson("The user is not connected");
+        } catch (NullJsonContentException ex) {
+            return gson.toJson("The json doesn't contain any content");
         }
     }
 

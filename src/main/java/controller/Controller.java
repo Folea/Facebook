@@ -62,16 +62,17 @@ public class Controller {
      * @throws UserExistsException If the user already exists.
      */
 
-    public void register(String json) throws UserExistsException {
+    public void register(String json) throws UserExistsException, NullJsonContentException {
         Gson gson = new Gson();
-        User user = gson.fromJson(json, User.class);
 
         try {
+            User user = gson.fromJson(json, User.class);
             users.insert(user);
+        } catch (NullPointerException ex) {
+            throw new NullJsonContentException(ex);
         } catch (RollbackException ex) {
             throw new UserExistsException(ex);
         }
-
     }
 
     /**
@@ -83,16 +84,20 @@ public class Controller {
      * @throws WrongPasswordException If the passwo
      */
 
-    public int login(String json) throws UserNotExistsException, WrongPasswordException {
+    public int login(String json) throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
         User user;
         Gson gson = new Gson();
-        user = users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername());
-        if (user.getPassword().compareTo(gson.fromJson(json, UserDTO.class).getPassword()) != 0) {
-            throw new WrongPasswordException();
-        } else {
-            Token token = new Token(user);
-            tokens.insert(token);
-            return token.getGUID();
+        try {
+            user = users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername());
+            if (user.getPassword().compareTo(gson.fromJson(json, UserDTO.class).getPassword()) != 0) {
+                throw new WrongPasswordException();
+            } else {
+                Token token = new Token(user);
+                tokens.insert(token);
+                return token.getGUID();
+            }
+        } catch (NullPointerException ex) {
+            throw new NullJsonContentException(ex);
         }
     }
 
@@ -107,12 +112,16 @@ public class Controller {
      * @throws TokenNotExistsException If the token doesn't exist in the DB.
      */
 
-    public int sendMessage(String json, int token) throws UserNotExistsException, TokenNotExistsException {
+    public int sendMessage(String json, int token) throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
-        Message message = new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(token).getUser(),
-                users.getUserByUsername(gson.fromJson(json, MessageDTO.class).getToUser()));
-        messages.insert(message);
-        return message.getId();
+        try {
+            Message message = new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(token).getUser(),
+                    users.getUserByUsername(gson.fromJson(json, MessageDTO.class).getToUser()));
+            messages.insert(message);
+            return message.getId();
+        } catch (NullPointerException ex) {
+            throw new NullJsonContentException(ex);
+        }
     }
 
     /**
@@ -152,11 +161,16 @@ public class Controller {
      * @throws TokenNotExistsException If the token doesn't exist.
      */
 
-    public int createPost(String json, int token) throws TokenNotExistsException {
+    public int createPost(String json, int token) throws TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
-        Post post = new Post(gson.fromJson(json, PublicationDTO.class).getContent(), tokens.getTokenById(token).getUser());
-        publications.insert(post);
-        return post.getId();
+        try {
+            String content = gson.fromJson(json, PublicationDTO.class).getContent();
+            Post post = new Post(content, tokens.getTokenById(token).getUser());
+            publications.insert(post);
+            return post.getId();
+        } catch (NullPointerException ex) {
+            throw new NullJsonContentException(ex);
+        }
     }
 
     /**
@@ -166,7 +180,7 @@ public class Controller {
      * @param id    The id of the publication.
      * @param token The token that identify the connected user.
      * @return The publication with the specified id.
-     * @throws TokenNotExistsException      If the token doesn't exist in the DB.
+     * @throws TokenNotExistsException                     If the token doesn't exist in the DB.
      * @throws my_exceptions.PublicationNotExistsException If the publication doesn't exist in the DB.
      */
 
@@ -193,16 +207,22 @@ public class Controller {
      * @param json  The JSOn that contains the id of the post to be commented and the content of the comment.
      * @param token The token that identify the connected user.
      * @return The id of the comment.
-     * @throws TokenNotExistsException      If the token doesn't exist in the DB.
+     * @throws TokenNotExistsException                     If the token doesn't exist in the DB.
      * @throws my_exceptions.PublicationNotExistsException If the publication doesn't exist in the DB.
      */
 
-    public int commentPost(String json, int token) throws TokenNotExistsException, PublicationNotExistsException {
+    public int commentPost(String json, int token) throws TokenNotExistsException, PublicationNotExistsException,
+            NullJsonContentException {
         Gson gson = new Gson();
-        Comment comment = new Comment(tokens.getTokenById(token).getUser(), gson.fromJson(json,
-                PublicationDTO.class).getContent(), publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()));
-        publications.insert(comment);
-        return comment.getId();
+        try {
+            Comment comment = new Comment(tokens.getTokenById(token).getUser(), gson.fromJson(json,
+                    PublicationDTO.class).getContent(), publications.getPublicationById(gson.fromJson(json,
+                    PublicationDTO.class).getPost()));
+            publications.insert(comment);
+            return comment.getId();
+        } catch (NullPointerException ex) {
+            throw new NullJsonContentException(ex);
+        }
     }
 
     /**
@@ -222,20 +242,25 @@ public class Controller {
      * @param json  The Json that contains the like content.
      * @param token The token that identify the connected user.
      * @return The id of the created like.
-     * @throws TokenNotExistsException      If the token doesn't exist.
+     * @throws TokenNotExistsException                     If the token doesn't exist.
      * @throws my_exceptions.PublicationNotExistsException If the publication doesn't exist.
      * @throws my_exceptions.LikeAlreadyExistsException    If the like already exist.
      */
 
-    public int likePublication(String json, int token) throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
+    public int likePublication(String json, int token) throws TokenNotExistsException, PublicationNotExistsException,
+            LikeAlreadyExistsException, NullJsonContentException {
         Gson gson = new Gson();
-        Likes like = new Likes(publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()), tokens.getTokenById(token).getUser());
         try {
+            Likes like = new Likes(publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()),
+                    tokens.getTokenById(token).getUser());
             likes.insert(like);
+            return like.getId();
         } catch (RollbackException ex) {
             throw new LikeAlreadyExistsException(ex);
+        } catch (NullPointerException ex) {
+            throw new NullJsonContentException(ex);
         }
-        return like.getId();
+
     }
 
     /**

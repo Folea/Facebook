@@ -8,6 +8,7 @@ import controller.Controller;
 import dto.ReturnDTO;
 import injector.MyInitializer;
 import injector.MyInjector;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.UserNotExistsException;
 import my_exceptions.WrongPasswordException;
 
@@ -47,6 +48,8 @@ public class Login {
             return gson.toJson("The user doesn't exist");
         } catch (WrongPasswordException ex) {
             return gson.toJson("The password is wrong");
+        } catch (NullJsonContentException e) {
+            return gson.toJson("The json doesn't contains the expected information");
         }
     }
 

@@ -30,8 +30,8 @@ public class PublicationTest {
      */
 
     @Test
-    public void createPostSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void createPostSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -60,8 +60,8 @@ public class PublicationTest {
      */
 
     @Test
-    public void getPostsSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void getPostsSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -92,8 +92,8 @@ public class PublicationTest {
      */
 
     @Test(expected = PublicationNotExistsException.class)
-    public void getPostByIdAndUserFail2() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void getPostByIdAndUserFail2() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -122,8 +122,8 @@ public class PublicationTest {
      */
 
     @Test
-    public void commentPostSuccess() throws UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistsException, TokenNotExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void commentPostSuccess() throws UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistsException, TokenNotExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 

@@ -6,6 +6,7 @@ import dto.PostDTO;
 import dto.PublicationDTO;
 import dto.ReturnDTO;
 import model.*;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 import org.junit.Before;
@@ -232,7 +233,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void createPostSuccess() throws TokenNotExistsException {
+    public void createPostSuccess() throws TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
 
         User user = new User("Folea", "Folea", "1234");
@@ -252,7 +253,7 @@ public class PostServiceTest {
     }
 
     @Test
-    public void createPostFail() throws TokenNotExistsException {
+    public void createPostFail1() throws TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
 
         User user = new User("Folea", "Folea", "1234");
@@ -267,6 +268,24 @@ public class PostServiceTest {
         postService.setController(controller);
 
         assertEquals(gson.toJson("The user is not connected"), postService.createPost(gson.toJson(post, PostDTO.class), 2));
+    }
+
+    @Test
+    public void createPostFail2() throws TokenNotExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+
+        User user = new User("Folea", "Folea", "1234");
+
+        PostDTO post = new PostDTO();
+        post.setContent("Hello");
+        post.setFromUser("Folea");
+
+        expect(controller.createPost(gson.toJson(post, PostDTO.class), 2)).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        postService.setController(controller);
+
+        assertEquals(gson.toJson("The json doesn't contain any content"), postService.createPost(gson.toJson(post, PostDTO.class), 2));
     }
 
 }

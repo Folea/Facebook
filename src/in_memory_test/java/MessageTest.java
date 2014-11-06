@@ -28,8 +28,8 @@ public class MessageTest {
      */
 
     @Test
-    public void sendMessageSuccess() throws UserNotExistsException, TokenNotExistsException, WrongPasswordException, MessageNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void sendMessageSuccess() throws UserNotExistsException, TokenNotExistsException, WrongPasswordException, MessageNotExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -58,8 +58,8 @@ public class MessageTest {
      */
 
     @Test
-    public void getMessagesSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void getMessagesSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -94,8 +94,8 @@ public class MessageTest {
      */
 
     @Test
-    public void getMessageByIdSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void getMessageByIdSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -128,8 +128,8 @@ public class MessageTest {
      */
 
     @Test(expected = MessageNotExistsException.class)
-    public void getMessageByIdFail4() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void getMessageByIdFail4() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, MessageNotExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 

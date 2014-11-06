@@ -11,6 +11,7 @@ import injector.MyInitializer;
 import injector.MyInjector;
 import model.Message;
 import my_exceptions.MessageNotExistsException;
+import my_exceptions.NullJsonContentException;
 import my_exceptions.TokenNotExistsException;
 import my_exceptions.UserNotExistsException;
 
@@ -59,6 +60,8 @@ public class MessageService {
             return gson.toJson("The user doesn't exist");
         } catch (TokenNotExistsException ex) {
             return gson.toJson("Must be logged");
+        } catch (NullJsonContentException e) {
+            return gson.toJson("The json doesn't contains the expected information");
         }
     }
 

@@ -29,8 +29,8 @@ public class LikeTest {
      */
 
     @Test
-    public void likePublicationSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void likePublicationSuccess() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
@@ -67,8 +67,8 @@ public class LikeTest {
      */
 
     @Test(expected = LikeAlreadyExistsException.class)
-    public void likePublicationFail5() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, UserExistsException {
-        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2-eclipselink"));
+    public void likePublicationFail5() throws UserNotExistsException, WrongPasswordException, TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, UserExistsException, NullJsonContentException {
+        Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("h2"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
         Controller controller = injector.getInstance(Controller.class);
 
