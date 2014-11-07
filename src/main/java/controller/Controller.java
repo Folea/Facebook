@@ -65,12 +65,20 @@ public class Controller {
 
     public void register(String json) throws UserExistsException, NullJsonContentException {
         Gson gson = new Gson();
+        User user;
+        UserDTO userDTO = gson.fromJson(json, UserDTO.class);
+
+        if (userDTO != null && userDTO.getUsername() != null && userDTO.getName() != null && userDTO.getPassword() != null) {
+            user = new User();
+            user.setPassword(userDTO.getPassword());
+            user.setUsername(userDTO.getUsername());
+            user.setName(userDTO.getName());
+        } else {
+            throw new NullJsonContentException();
+        }
 
         try {
-            User user = gson.fromJson(json, User.class);
             users.insert(user);
-        } catch (NullPointerException ex) {
-            throw new NullJsonContentException(ex);
         } catch (RollbackException ex) {
             throw new UserExistsException(ex);
         }
@@ -89,17 +97,20 @@ public class Controller {
     public int login(String json) throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
         User user;
         Gson gson = new Gson();
-        try {
-            user = users.getUserByUsername(gson.fromJson(json, UserDTO.class).getUsername());
-            if (user.getPassword().compareTo(gson.fromJson(json, UserDTO.class).getPassword()) != 0) {
-                throw new WrongPasswordException();
-            } else {
-                Token token = new Token(user);
-                tokens.insert(token);
-                return token.getGUID();
-            }
-        } catch (NullPointerException ex) {
-            throw new NullJsonContentException(ex);
+        UserDTO userDTO = gson.fromJson(json, UserDTO.class);
+
+        if (userDTO != null && userDTO.getUsername() != null && userDTO.getPassword() != null) {
+            user = users.getUserByUsername(userDTO.getUsername());
+        } else {
+            throw new NullJsonContentException();
+        }
+
+        if (user.getPassword().compareTo(gson.fromJson(json, UserDTO.class).getPassword()) != 0) {
+            throw new WrongPasswordException();
+        } else {
+            Token token = new Token(user);
+            tokens.insert(token);
+            return token.getGUID();
         }
     }
 
@@ -117,15 +128,19 @@ public class Controller {
 
     public int sendMessage(String json, int token) throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
-        try {
-            Message message = new Message(gson.fromJson(json, MessageDTO.class).getContent(), tokens.getTokenById(token).getUser(),
-                    users.getUserByUsername(gson.fromJson(json, MessageDTO.class).getToUser()));
-            messages.insert(message);
-            return message.getId();
-        } catch (NullPointerException ex) {
-            throw new NullJsonContentException(ex);
+        Message message;
+        MessageDTO messageDTO = gson.fromJson(json, MessageDTO.class);
+
+        if (messageDTO != null && messageDTO.getToUser() != null && messageDTO.getContent() != null) {
+            message = new Message(messageDTO.getContent(), tokens.getTokenById(token).getUser(), users.getUserByUsername(messageDTO.getToUser()));
+        } else {
+            throw new NullJsonContentException();
         }
+
+        messages.insert(message);
+        return message.getId();
     }
+
 
     /**
      * getMessages retrieve the messages received by the user connected with the token.
@@ -167,14 +182,17 @@ public class Controller {
 
     public int createPost(String json, int token) throws TokenNotExistsException, NullJsonContentException {
         Gson gson = new Gson();
-        try {
-            String content = gson.fromJson(json, PublicationDTO.class).getContent();
-            Post post = new Post(content, tokens.getTokenById(token).getUser());
-            publications.insert(post);
-            return post.getId();
-        } catch (NullPointerException ex) {
-            throw new NullJsonContentException(ex);
+        PublicationDTO publicationDTO = gson.fromJson(json, PublicationDTO.class);
+        Post post;
+
+        if (publicationDTO != null && publicationDTO.getContent() != null) {
+            post = new Post(publicationDTO.getContent(), tokens.getTokenById(token).getUser());
+        } else {
+            throw new NullJsonContentException();
         }
+
+        publications.insert(post);
+        return post.getId();
     }
 
     /**
@@ -218,15 +236,17 @@ public class Controller {
     public int commentPost(String json, int token) throws TokenNotExistsException, PublicationNotExistsException,
             NullJsonContentException {
         Gson gson = new Gson();
-        try {
-            Comment comment = new Comment(tokens.getTokenById(token).getUser(), gson.fromJson(json,
-                    PublicationDTO.class).getContent(), publications.getPublicationById(gson.fromJson(json,
-                    PublicationDTO.class).getPost()));
-            publications.insert(comment);
-            return comment.getId();
-        } catch (NullPointerException ex) {
-            throw new NullJsonContentException(ex);
+        PublicationDTO publicationDTO = gson.fromJson(json, PublicationDTO.class);
+        Comment comment;
+
+        if (publicationDTO != null && publicationDTO.getContent() != null) {
+            comment = new Comment(tokens.getTokenById(token).getUser(), publicationDTO.getContent(),
+                    publications.getPublicationById(publicationDTO.getPost()));
+        } else {
+            throw new NullJsonContentException();
         }
+        publications.insert(comment);
+        return comment.getId();
     }
 
     /**
@@ -253,19 +273,19 @@ public class Controller {
      */
 
     public int likePublication(String json, int token) throws TokenNotExistsException, PublicationNotExistsException,
-            LikeAlreadyExistsException, NullJsonContentException {
+            LikeAlreadyExistsException {
         Gson gson = new Gson();
+        PublicationDTO publicationDTO = gson.fromJson(json, PublicationDTO.class);
+        Likes like = new Likes();
+        like.setFromUser(tokens.getTokenById(token).getUser());
+        like.setPublication(publications.getPublicationById(publicationDTO.getPost()));
+
         try {
-            Likes like = new Likes(publications.getPublicationById(gson.fromJson(json, PublicationDTO.class).getPost()),
-                    tokens.getTokenById(token).getUser());
             likes.insert(like);
             return like.getId();
         } catch (RollbackException ex) {
             throw new LikeAlreadyExistsException(ex);
-        } catch (NullPointerException ex) {
-            throw new NullJsonContentException(ex);
         }
-
     }
 
     /**

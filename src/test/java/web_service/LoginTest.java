@@ -88,4 +88,34 @@ public class LoginTest {
 
         assertEquals(gson.toJson("The json doesn't contains the expected information"), login.login(gson.toJson(userDTO)));
     }
+
+    @Test
+    public void loginFail4() throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
+        Gson gson = new Gson();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("Folea");
+        userDTO.setPassword("1234");
+
+        expect(controller.login(null)).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        login.setController(controller);
+
+        assertEquals(gson.toJson("The json doesn't contains the expected information"), login.login(null));
+    }
+
+    @Test
+    public void loginFail5() throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
+        Gson gson = new Gson();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("Folea");
+        userDTO.setPassword("1234");
+
+        expect(controller.login("")).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        login.setController(controller);
+
+        assertEquals(gson.toJson("The json doesn't contains the expected information"), login.login(""));
+    }
 }

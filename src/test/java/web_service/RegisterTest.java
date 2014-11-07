@@ -75,4 +75,41 @@ public class RegisterTest {
         assertEquals(gson.toJson("The json doesn't contains the expected information"), register.register(gson.toJson(userDTO, UserDTO.class)));
     }
 
+    @Test
+    public void registerFail3() throws UserExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("Folea");
+        userDTO.setUsername("Folea");
+        userDTO.setPassword("1234");
+
+        controller.register("");
+        controller.register(null);
+        expectLastCall().andThrow(new NullJsonContentException());
+        replay(controller);
+
+        register.setController(controller);
+
+        assertEquals(gson.toJson("The json doesn't contains the expected information"), register.register(null));
+    }
+
+    @Test
+    public void registerFail4() throws UserExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("Folea");
+        userDTO.setUsername("Folea");
+        userDTO.setPassword("1234");
+
+        controller.register("");
+        expectLastCall().andThrow(new NullJsonContentException());
+        replay(controller);
+
+        register.setController(controller);
+
+        assertEquals(gson.toJson("The json doesn't contains the expected information"), register.register(""));
+    }
+
 }

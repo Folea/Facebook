@@ -2,7 +2,10 @@ package model;
 
 import org.eclipse.persistence.annotations.Index;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 @DiscriminatorValue(value = "POST")

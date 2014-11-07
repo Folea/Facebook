@@ -70,11 +70,27 @@ public class CommentPostTest {
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setContent("Hello");
         publicationDTO.setPost(5);
-        expect(controller.commentPost(gson.toJson(publicationDTO), 1)).andThrow(new NullJsonContentException());
+
+        expect(controller.commentPost(null, 1)).andThrow(new NullJsonContentException());
+        expect(controller.commentPost("", 1)).andThrow(new NullJsonContentException());
         replay(controller);
 
         commentPost.setController(controller);
-        assertEquals(gson.toJson("The json doesn't contain the expected information"), commentPost.commentPost(gson.toJson(publicationDTO), 1));
+        assertEquals(gson.toJson("The json doesn't contain the expected information"), commentPost.commentPost(null, 1));
+    }
+
+    @Test
+    public void commentPostTestFail4() throws PublicationNotExistsException, TokenNotExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+        PublicationDTO publicationDTO = new PublicationDTO();
+        publicationDTO.setContent("Hello");
+        publicationDTO.setPost(5);
+
+        expect(controller.commentPost("", 1)).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        commentPost.setController(controller);
+        assertEquals(gson.toJson("The json doesn't contain the expected information"), commentPost.commentPost("", 1));
     }
 
 }

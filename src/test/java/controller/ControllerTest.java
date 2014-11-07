@@ -61,7 +61,7 @@ public class ControllerTest {
     }
 
     @Test(expected = UserExistsException.class)
-    public void registerTestFail() throws UserExistsException, NullJsonContentException {
+    public void registerTestFail1() throws UserExistsException, NullJsonContentException {
         Gson gson = new Gson();
         UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
 
@@ -73,15 +73,11 @@ public class ControllerTest {
     }
 
     @Test(expected = NullJsonContentException.class)
-    public void registerTestFail1() throws UserExistsException, NullJsonContentException {
+    public void registerTestFail2() throws UserExistsException, NullJsonContentException {
         Gson gson = new Gson();
         UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
 
-        users.insert(isA(User.class));
-        expectLastCall().andThrow(new NullPointerException());
-        replay(users);
-
-        controller.register(gson.toJson(userDTO));
+        controller.register(gson.toJson(null));
     }
 
     @Test
@@ -127,10 +123,7 @@ public class ControllerTest {
         User user = new User("Folea", "Folea", "12");
         UserDTO userDTO = new UserDTO("Folea", "Folea", "1234");
 
-        expect(users.getUserByUsername("Folea")).andThrow(new NullPointerException());
-        replay(users);
-
-        controller.login(gson.toJson(userDTO));
+        controller.login(null);
     }
 
     @Test
@@ -195,14 +188,8 @@ public class ControllerTest {
         messageDTO.setToUser("Cristi");
         Token token = new Token(new User("Folea", "Folea", "1234"));
         token.setGUID(5);
-        expect(tokens.getTokenById(5)).andThrow(new NullPointerException());
-        expect(users.getUserByUsername("Cristi")).andReturn(new User("Cristi", "Cristi", "1234"));
 
-        replay(tokens);
-        replay(users);
-        replay(messages);
-
-        controller.sendMessage(gson.toJson(messageDTO), 5);
+        controller.sendMessage(null, 5);
     }
 
     @Test
@@ -329,12 +316,8 @@ public class ControllerTest {
         user.setId(1);
         Token token = new Token(user);
         token.setGUID(5);
-        expect(tokens.getTokenById(5)).andThrow(new NullPointerException());
 
-        replay(tokens);
-        replay(publications);
-
-        controller.createPost(gson.toJson(publicationDTO, PublicationDTO.class), 5);
+        controller.createPost(null, 5);
     }
 
     @Test
@@ -519,12 +502,7 @@ public class ControllerTest {
         Post post = new Post();
         post.setId(10);
 
-        expect(publications.getPublicationById(10)).andThrow(new NullPointerException());
-
-        replay(tokens);
-        replay(publications);
-
-        controller.commentPost(gson.toJson(publicationDTO), token.getGUID());
+        controller.commentPost(null, token.getGUID());
     }
 
     @Test
@@ -545,7 +523,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void likePublicationSuccess() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
+    public void likePublicationSuccess() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -568,7 +546,7 @@ public class ControllerTest {
     }
 
     @Test(expected = TokenNotExistsException.class)
-    public void likePublicationFail1() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
+    public void likePublicationFail1() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -591,7 +569,7 @@ public class ControllerTest {
     }
 
     @Test(expected = PublicationNotExistsException.class)
-    public void likePublicationFail2() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
+    public void likePublicationFail2() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -614,7 +592,7 @@ public class ControllerTest {
     }
 
     @Test(expected = LikeAlreadyExistsException.class)
-    public void likePublicationFail3() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
+    public void likePublicationFail3() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");
         user.setId(1);
@@ -639,34 +617,6 @@ public class ControllerTest {
 
         controller.likePublication(gson.toJson(publicationDTO), token.getGUID());
     }
-
-    @Test(expected = NullJsonContentException.class)
-    public void likePublicationFail4() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
-        Gson gson = new Gson();
-        User user = new User("Folea", "Folea", "1234");
-        user.setId(1);
-        Token token = new Token(user);
-        token.setGUID(5);
-        expect(tokens.getTokenById(5)).andReturn(token);
-
-        PublicationDTO publicationDTO = new PublicationDTO();
-        publicationDTO.setPost(10);
-
-        Post post = new Post();
-        post.setId(10);
-
-        expect(publications.getPublicationById(10)).andThrow(new NullPointerException());
-
-        likes.insert(isA(Likes.class));
-        expectLastCall().andThrow(new RollbackException());
-
-        replay(tokens);
-        replay(publications);
-        replay(likes);
-
-        controller.likePublication(gson.toJson(publicationDTO), token.getGUID());
-    }
-
 
     @Test
     public void getLikesForPublicationSuccess() {

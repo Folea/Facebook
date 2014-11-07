@@ -11,7 +11,7 @@ import my_exceptions.*;
 
 public class Main {
 
-    public static void main(String[] args0) throws TokenNotExistsException, MessageNotExistsException, UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistsException, NullJsonContentException {
+    public static void main(String[] args0) throws TokenNotExistsException, MessageNotExistsException, UserExistsException, UserNotExistsException, WrongPasswordException, PublicationNotExistsException, NullJsonContentException, LikeAlreadyExistsException {
 
         Injector injector = Guice.createInjector(new MyInjector(), new JpaPersistModule("facebook"));
         MyInitializer myInitializer = injector.getInstance(MyInitializer.class);
@@ -23,18 +23,22 @@ public class Main {
         userDTO.setUsername("Folea");
         userDTO.setName("Folea");
 
+        //controller.register(gson.toJson(userDTO, UserDTO.class));
+        //controller.login(gson.toJson(userDTO, UserDTO.class));
 
-        controller.register(gson.toJson(userDTO, UserDTO.class));
-        controller.login(gson.toJson(userDTO, UserDTO.class));
 
-
-       /* PostDTO postDTO  = new PostDTO();
+        /*PostDTO postDTO  = new PostDTO();
         postDTO.setContent("sssa");
         controller.createPost(gson.toJson(postDTO, PostDTO.class), 1);*/
 
         /*PublicationDTO publicationDTO = new PublicationDTO();
-        publicationDTO.setPost(201);
+        publicationDTO.setPost(51);
         controller.likePublication(gson.toJson(publicationDTO), 1);*/
+
+        /*PublicationDTO publicationDTO = new PublicationDTO();
+        publicationDTO.setContent("test");
+        publicationDTO.setPost(9999);
+        controller.commentPost(gson.toJson(publicationDTO, PublicationDTO.class), 1);*/
     }
 
 }

@@ -288,4 +288,40 @@ public class PostServiceTest {
         assertEquals(gson.toJson("The json doesn't contain any content"), postService.createPost(gson.toJson(post, PostDTO.class), 2));
     }
 
+    @Test
+    public void createPostFail3() throws TokenNotExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+
+        User user = new User("Folea", "Folea", "1234");
+
+        PostDTO post = new PostDTO();
+        post.setContent("Hello");
+        post.setFromUser("Folea");
+
+        expect(controller.createPost(null, 2)).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        postService.setController(controller);
+
+        assertEquals(gson.toJson("The json doesn't contain any content"), postService.createPost(null, 2));
+    }
+
+    @Test
+    public void createPostFail4() throws TokenNotExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+
+        User user = new User("Folea", "Folea", "1234");
+
+        PostDTO post = new PostDTO();
+        post.setContent("Hello");
+        post.setFromUser("Folea");
+
+        expect(controller.createPost("", 2)).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        postService.setController(controller);
+
+        assertEquals(gson.toJson("The json doesn't contain any content"), postService.createPost("", 2));
+    }
+
 }

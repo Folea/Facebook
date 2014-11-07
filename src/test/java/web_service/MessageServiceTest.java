@@ -142,6 +142,38 @@ public class MessageServiceTest {
     }
 
     @Test
+    public void sendMessageFail4() throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setContent("Hello");
+        messageDTO.setToUser("Folea");
+        messageDTO.setFromUser("Folea");
+
+        expect(controller.sendMessage(null, 1)).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        messageService.setController(controller);
+        assertEquals(gson.toJson("The json doesn't contains the expected information"), messageService.sendMessage(null, 1));
+    }
+
+    @Test
+    public void sendMessageFail5() throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
+        Gson gson = new Gson();
+
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setContent("Hello");
+        messageDTO.setToUser("Folea");
+        messageDTO.setFromUser("Folea");
+
+        expect(controller.sendMessage("", 1)).andThrow(new NullJsonContentException());
+        replay(controller);
+
+        messageService.setController(controller);
+        assertEquals(gson.toJson("The json doesn't contains the expected information"), messageService.sendMessage("", 1));
+    }
+
+    @Test
     public void getMessageSuccess() throws TokenNotExistsException, MessageNotExistsException {
         Gson gson = new Gson();
         User user = new User("Folea", "Folea", "1234");

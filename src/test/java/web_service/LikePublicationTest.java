@@ -5,7 +5,6 @@ import controller.Controller;
 import dto.PublicationDTO;
 import dto.ReturnDTO;
 import my_exceptions.LikeAlreadyExistsException;
-import my_exceptions.NullJsonContentException;
 import my_exceptions.PublicationNotExistsException;
 import my_exceptions.TokenNotExistsException;
 import org.junit.Before;
@@ -26,7 +25,7 @@ public class LikePublicationTest {
     }
 
     @Test
-    public void likePostSuccess() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
+    public void likePostSuccess() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setPost(5);
@@ -41,7 +40,7 @@ public class LikePublicationTest {
     }
 
     @Test
-    public void likePostFail1() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
+    public void likePostFail1() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setPost(5);
@@ -55,7 +54,7 @@ public class LikePublicationTest {
     }
 
     @Test
-    public void likePostFail2() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
+    public void likePostFail2() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setPost(5);
@@ -68,30 +67,16 @@ public class LikePublicationTest {
     }
 
     @Test
-    public void likePostFail3() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
+    public void likePostFail4() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException {
         Gson gson = new Gson();
         PublicationDTO publicationDTO = new PublicationDTO();
         publicationDTO.setPost(5);
-        expect(controller.likePublication(gson.toJson(publicationDTO), 1)).andThrow(new NullJsonContentException());
 
-        replay(controller);
-
-        likePublication.setController(controller);
-        assertEquals(gson.toJson("The json doesn't contain the expected information"), likePublication.likePost(gson.toJson(publicationDTO), 1));
-    }
-
-    @Test
-    public void likePostFail4() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
-        Gson gson = new Gson();
-        PublicationDTO publicationDTO = new PublicationDTO();
-        publicationDTO.setPost(5);
         expect(controller.likePublication(gson.toJson(publicationDTO), 1)).andThrow(new LikeAlreadyExistsException());
-
         replay(controller);
 
         likePublication.setController(controller);
         assertEquals(gson.toJson("The like already exist"), likePublication.likePost(gson.toJson(publicationDTO), 1));
     }
-
 
 }
