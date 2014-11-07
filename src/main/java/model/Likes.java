@@ -23,6 +23,7 @@ public class Likes {
     @OneToOne
     private User fromUser;
 
+    @org.eclipse.persistence.annotations.Index
     @JoinColumn(name = "PUBLICATION")
     @OneToOne
     private Publication publication;

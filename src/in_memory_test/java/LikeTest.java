@@ -20,12 +20,12 @@ public class LikeTest {
      * Tests if a like is persisted successful on the DB by insert the like and then retrieve it from the DB and compare
      * to the like that was inserted.
      *
-     * @throws UserNotExistsException       If the user doesn't exist.
-     * @throws WrongPasswordException       If the password of the user to login is wrong.
-     * @throws TokenNotExistsException      If the token of the user to post the like is wrong.
+     * @throws UserNotExistsException                      If the user doesn't exist.
+     * @throws WrongPasswordException                      If the password of the user to login is wrong.
+     * @throws TokenNotExistsException                     If the token of the user to post the like is wrong.
      * @throws my_exceptions.PublicationNotExistsException If the publication to like doesn't exists.
      * @throws my_exceptions.LikeAlreadyExistsException    If the like already exists.
-     * @throws UserExistsException          If the user to register already exists.
+     * @throws UserExistsException                         If the user to register already exists.
      */
 
     @Test
@@ -58,12 +58,12 @@ public class LikeTest {
     /**
      * Test if when try to insert a like that already exists will received a LikeAlreadyExistsException.
      *
-     * @throws UserNotExistsException       If the user doesn't exist.
-     * @throws WrongPasswordException       If the password of the user to login is wrong.
-     * @throws TokenNotExistsException      If the token of the user to post the like is wrong.
+     * @throws UserNotExistsException                      If the user doesn't exist.
+     * @throws WrongPasswordException                      If the password of the user to login is wrong.
+     * @throws TokenNotExistsException                     If the token of the user to post the like is wrong.
      * @throws my_exceptions.PublicationNotExistsException If the publication to like doesn't exists.
      * @throws my_exceptions.LikeAlreadyExistsException    If the like already exists.
-     * @throws UserExistsException          If the user to register already exists.
+     * @throws UserExistsException                         If the user to register already exists.
      */
 
     @Test(expected = LikeAlreadyExistsException.class)

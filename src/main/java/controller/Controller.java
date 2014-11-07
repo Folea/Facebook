@@ -59,7 +59,8 @@ public class Controller {
      * register it's used to register a used. The information about the user to register it's provide by a JSON.
      *
      * @param json The JSON that contains the user information.
-     * @throws UserExistsException If the user already exists.
+     * @throws UserExistsException                    If the user already exists.
+     * @throws my_exceptions.NullJsonContentException If the json doesn't contains the information that the app needs.
      */
 
     public void register(String json) throws UserExistsException, NullJsonContentException {
@@ -80,8 +81,9 @@ public class Controller {
      *
      * @param json The JSON that contains the user information.
      * @return If the user exists and the password match return the user id.
-     * @throws UserNotExistsException If the user doesn't exist in the DB.
-     * @throws WrongPasswordException If the passwo
+     * @throws UserNotExistsException                 If the user doesn't exist in the DB.
+     * @throws WrongPasswordException                 If the password
+     * @throws my_exceptions.NullJsonContentException If the json doesn't contains the information that the app needs.
      */
 
     public int login(String json) throws UserNotExistsException, WrongPasswordException, NullJsonContentException {
@@ -108,8 +110,9 @@ public class Controller {
      * @param json  The JSON that contains the message information.
      * @param token The token which identify the user which want to send the message.
      * @return return the id from the send message.
-     * @throws UserNotExistsException  If the user doesn't exist in the DB.
-     * @throws TokenNotExistsException If the token doesn't exist in the DB.
+     * @throws UserNotExistsException                 If the user doesn't exist in the DB.
+     * @throws TokenNotExistsException                If the token doesn't exist in the DB.
+     * @throws my_exceptions.NullJsonContentException If the json doesn't contains the information that the app needs.
      */
 
     public int sendMessage(String json, int token) throws UserNotExistsException, TokenNotExistsException, NullJsonContentException {
@@ -158,7 +161,8 @@ public class Controller {
      * @param json  Post data.
      * @param token The user token.
      * @return The id of the created post.
-     * @throws TokenNotExistsException If the token doesn't exist.
+     * @throws TokenNotExistsException                If the token doesn't exist.
+     * @throws my_exceptions.NullJsonContentException If the json doesn't contains the information that the app needs.
      */
 
     public int createPost(String json, int token) throws TokenNotExistsException, NullJsonContentException {
@@ -245,6 +249,7 @@ public class Controller {
      * @throws TokenNotExistsException                     If the token doesn't exist.
      * @throws my_exceptions.PublicationNotExistsException If the publication doesn't exist.
      * @throws my_exceptions.LikeAlreadyExistsException    If the like already exist.
+     * @throws my_exceptions.NullJsonContentException      If the json doesn't contains the information that the app needs.
      */
 
     public int likePublication(String json, int token) throws TokenNotExistsException, PublicationNotExistsException,

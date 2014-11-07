@@ -1,14 +1,16 @@
 package model;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import org.eclipse.persistence.annotations.Index;
+
+import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue(value = "POST")
 public class Post extends Publication {
 
+    @Index
     @OneToOne
+    @JoinColumn(name = "FROM_USER")
     private User fromUser;
 
     public Post() {

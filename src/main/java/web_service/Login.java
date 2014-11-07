@@ -31,6 +31,7 @@ public class Login {
 
     /**
      * Login into the application. The login information will be passed by a json file.
+     *
      * @param json The json which contains the login information.
      * @return A json with the token id if the login was successful or will return a json containing information
      * about the exception that occurs when try to login.

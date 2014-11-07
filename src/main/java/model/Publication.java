@@ -1,5 +1,7 @@
 package model;
 
+import org.eclipse.persistence.annotations.Index;
+
 import javax.persistence.*;
 
 /**
@@ -14,11 +16,15 @@ import javax.persistence.*;
         @NamedQuery(name = "Publication.getPostByUser", query = "select p from Post as p where p.fromUser.id = :user"),
         @NamedQuery(name = "Publication.getCommentByPost", query = "select c from Comment as c where c.publication.id = :publication")
 })
+@Index(name = "ID_USER_INDEX", columnNames = {"ID", "FROM_USER"})
 public class Publication {
 
+    @Index
     @Id
     @GeneratedValue
+    @Column(name = "ID")
     private int id;
+
     @Basic
     private String content;
 

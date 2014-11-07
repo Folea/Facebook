@@ -1,6 +1,6 @@
 package my_exceptions;
 
-public class NullJsonContentException extends Exception{
+public class NullJsonContentException extends Exception {
 
     public NullJsonContentException() {
     }

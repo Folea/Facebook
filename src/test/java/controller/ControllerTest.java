@@ -639,6 +639,7 @@ public class ControllerTest {
 
         controller.likePublication(gson.toJson(publicationDTO), token.getGUID());
     }
+
     @Test(expected = NullJsonContentException.class)
     public void likePublicationFail4() throws TokenNotExistsException, PublicationNotExistsException, LikeAlreadyExistsException, NullJsonContentException {
         Gson gson = new Gson();

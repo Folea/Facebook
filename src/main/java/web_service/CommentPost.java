@@ -29,7 +29,8 @@ public class CommentPost {
     /**
      * commentPost receive a json and the token of the logged user and call controller commentPost which interprets the
      * json. If controller.commentPost can't create the comment will return a exception that identify the error.
-     * @param json The json whit comments data.
+     *
+     * @param json  The json whit comments data.
      * @param token The token of the connected user.
      * @return Returns a Json. If the comment was created the json will contain information about the comment, otherwise
      * will return information about the problem.

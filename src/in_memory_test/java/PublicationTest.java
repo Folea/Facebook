@@ -22,11 +22,11 @@ public class PublicationTest {
     /**
      * Test if createPost creates a post and when retrieve is the same that the one that was inserted.
      *
-     * @throws UserNotExistsException       If the user which will create the post doesn't exist.
-     * @throws WrongPasswordException       If the user that want to login have insert a wrong password.
-     * @throws TokenNotExistsException      If the token of the logged user is wrong.
+     * @throws UserNotExistsException                      If the user which will create the post doesn't exist.
+     * @throws WrongPasswordException                      If the user that want to login have insert a wrong password.
+     * @throws TokenNotExistsException                     If the token of the logged user is wrong.
      * @throws my_exceptions.PublicationNotExistsException If when try to retrieve the post that was inserted, the post doesn't exist in the DB.
-     * @throws UserExistsException          If the user to register doesn't exist.
+     * @throws UserExistsException                         If the user to register doesn't exist.
      */
 
     @Test
@@ -84,11 +84,11 @@ public class PublicationTest {
     /**
      * Test if when try to get a post that doesn't exist in the DB will receive a PublicationNotExistException
      *
-     * @throws UserNotExistsException       If the user which will create the post doesn't exist.
-     * @throws WrongPasswordException       If the user that want to login have insert a wrong password.
-     * @throws TokenNotExistsException      If the token of the logged user is wrong.
+     * @throws UserNotExistsException                      If the user which will create the post doesn't exist.
+     * @throws WrongPasswordException                      If the user that want to login have insert a wrong password.
+     * @throws TokenNotExistsException                     If the token of the logged user is wrong.
      * @throws my_exceptions.PublicationNotExistsException If when try to retrieve the post that was inserted, the post doesn't exist in the DB.
-     * @throws UserExistsException          If the user to register doesn't exist.
+     * @throws UserExistsException                         If the user to register doesn't exist.
      */
 
     @Test(expected = PublicationNotExistsException.class)

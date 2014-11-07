@@ -62,6 +62,7 @@ public class PublicationDAOImpl implements PublicationDAO {
 
     /**
      * getPublicationById method it's used to get a publication which id is equals to the parameter id.
+     *
      * @param id The id of the publication.
      * @return Return the publication if it exists
      * @throws PublicationNotExistsException If the publication doesn't exist, will throw this exception.

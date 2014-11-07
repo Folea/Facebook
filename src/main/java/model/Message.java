@@ -1,5 +1,7 @@
 package model;
 
+import org.eclipse.persistence.annotations.Index;
+
 import javax.persistence.*;
 
 /**
@@ -13,13 +15,19 @@ import javax.persistence.*;
 })
 public class Message {
 
+    @org.eclipse.persistence.annotations.Index
     @Id
     @GeneratedValue
     private int id;
+
     @Basic
     private String content;
+
     @ManyToOne
     private User fromUser;
+
+    @Index
+    @JoinColumn(name = "TO_USER")
     @ManyToOne
     private User toUser;
 

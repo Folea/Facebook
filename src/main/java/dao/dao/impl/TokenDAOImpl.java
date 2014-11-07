@@ -28,6 +28,7 @@ public class TokenDAOImpl implements TokenDAO {
 
     /**
      * Insert a token into the DB.
+     *
      * @param token The token to insert.
      */
 
@@ -42,6 +43,7 @@ public class TokenDAOImpl implements TokenDAO {
 
     /**
      * getTokenById method is used to get a specific token from the DB.
+     *
      * @param id The id of the token to get.
      * @return The token if it exist.
      * @throws TokenNotExistsException If the token doesn't exist will throw the exception.

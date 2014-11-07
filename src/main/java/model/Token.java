@@ -14,6 +14,7 @@ import javax.persistence.*;
 })
 public class Token {
 
+    @org.eclipse.persistence.annotations.Index
     @Id
     @GeneratedValue(generator = "system-uuid")
     private int GUID;

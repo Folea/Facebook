@@ -56,7 +56,8 @@ public class MessageDAOImpl implements MessageDAO {
 
     /**
      * getMessageById method it's used to get a message which id is equals to the parameter id.
-     * @param id The id of the message
+     *
+     * @param id   The id of the message
      * @param user The is of the user for which to search the message.
      * @return The message if it exist.
      * @throws MessageNotExistsException If the message with that id doesn't exists, will throw the exception.

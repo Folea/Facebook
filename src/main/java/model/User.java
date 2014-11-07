@@ -1,5 +1,7 @@
 package model;
 
+import org.eclipse.persistence.annotations.Index;
+
 import javax.persistence.*;
 
 /**
@@ -14,14 +16,19 @@ import javax.persistence.*;
 
 public class User {
 
+    @Index
     @Id
     @GeneratedValue
     private int id;
+
     @Basic
     private String name;
+
+    @Index
     @Basic
     @Column(unique = true)
     private String username;
+
     @Basic
     private String password;
 

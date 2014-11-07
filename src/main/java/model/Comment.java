@@ -1,5 +1,7 @@
 package model;
 
+import org.eclipse.persistence.annotations.Index;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -16,6 +18,7 @@ public class Comment extends Publication {
     @ManyToOne
     private User fromUser;
 
+    @Index
     @OneToOne
     private Publication publication;
 

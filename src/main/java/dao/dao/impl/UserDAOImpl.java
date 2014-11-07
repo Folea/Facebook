@@ -30,6 +30,7 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Insert a new user into the DB.
+     *
      * @param user The user to insert.
      */
 
@@ -41,9 +42,10 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Get a user knowing his username.
+     *
      * @param username The username of the user to get.
      * @return Returns the user if it exist.
-     * @throws UserNotExistsException  Throws the exception if the user doesn't exist.
+     * @throws UserNotExistsException Throws the exception if the user doesn't exist.
      */
 
     @Override
@@ -61,6 +63,7 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Get a user knowing his id.
+     *
      * @param id The id of the user to get.
      * @return The user if it exist.
      * @throws UserNotExistsException Throws the exception if the user doesn't exist.
