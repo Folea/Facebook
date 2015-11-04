@@ -25,6 +25,9 @@
           <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.3" />
         </element>
       </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/facebook/META-INF/MANIFEST.MF" />
+      </element>
       <element id="javaee-facet-resources" facet="facebook/web/Web" />
     </root>
   </artifact>
